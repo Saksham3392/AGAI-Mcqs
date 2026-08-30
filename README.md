@@ -31,14 +31,6 @@ An interactive, high-performance web platform designed for Chitkara University's
 
 ## 💻 Run Locally
 
-### Using Python:
-```bash
-python serve.py
-```
-Then open `http://localhost:8000` in your web browser.
-
-### Using Docker:
-```bash
-docker compose up -d
-```
-Then open `http://localhost:8000` in your web browser.
+```cmd
+cd /d "file path"
+start index.html

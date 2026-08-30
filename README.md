@@ -35,3 +35,8 @@ An interactive, high-performance web platform designed for Chitkara University's
 @echo off
 cd /d "C:\Users\Asus\Downloads\CSE AI 5th Sem\AGAI\AGAIMcqs"
 start index.html
+```
+
+Or 
+```cmd
+cmd /c "cd /d "C:\Users\Asus\Downloads\CSE AI 5th Sem\AGAI\AGAIMcqs" && start index.html"

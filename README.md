@@ -32,5 +32,4 @@ An interactive, high-performance web platform designed for Chitkara University's
 ## 💻 Run Locally
 
 ```cmd
-cd /d "file path"
-start index.html
+cmd /c "cd /d "C:\Users\Asus\Downloads\CSE AI 5th Sem\AGAI\AGAIMcqs" && start index.html"

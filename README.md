@@ -3,6 +3,11 @@
 > 🌐 **To run and access this program, open the live link:**  
 > **[https://agai-mcqs.onrender.com](https://agai-mcqs.onrender.com)**
 
+> To run on pc
+```cmd
+cd /d "c:\Users\Asus\Downloads\CSE AI 5th Sem\AGAI\AGAIMcqs" && start http://localhost:3020 && python -m http.server 3020
+```
+
 ---
 
 ## 📖 Overview

@@ -2,6 +2,7 @@
 
 > 🌐 **To run and access this program, open the live link:**  
 > **[https://agai-mcqs.onrender.com](https://agai-mcqs.onrender.com)**
+> ttps://agai-mcqs-8k6b.vercel.app/index.html
 
 > To run on pc
 ```cmd

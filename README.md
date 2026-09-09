@@ -12,7 +12,7 @@ cd /d "c:\Users\Asus\Downloads\CSE AI 5th Sem\AGAI\AGAIMcqs" && start http://loc
 
 ## 📖 Overview
 
-An interactive, high-performance web platform designed for Chitkara University's **Applied Generative & Agentic AI Systems (24CAI0305)** ST-2 exam preparation and syllabus revision (covering **Lectures 24–37**).
+An interactive, high-performance web platform designed for Chitkara University's **Applied Generative & Agentic AI Systems (24CAI0305)** ST-2 exam preparation and syllabus revision.
 
 ---
 

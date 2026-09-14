@@ -1,4 +1,4 @@
-# Applied Generative & Agentic AI Systems (24CAI0305) — ST-2 Masterclass Revision
+# Applied Generative & Agentic AI Systems (24CAI0305) — Revision
 
 > 🌐 **To run and access this program, open the live link:**  
 > **[https://agai-mcqs.onrender.com](https://agai-mcqs.onrender.com)**

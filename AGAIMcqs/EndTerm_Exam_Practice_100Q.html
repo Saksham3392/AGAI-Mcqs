@@ -1,0 +1,2436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deep Learning &amp; LLM Systems — Exam Practice Bank</title>
+<style>
+  :root{
+    --paper: #f5f3ec;
+    --paper-raised: #fbfaf6;
+    --ink: #1c2431;
+    --ink-soft: #4b5566;
+    --ink-faint: #8a90a0;
+    --hair: rgba(28,36,49,0.12);
+    --hair-strong: rgba(28,36,49,0.22);
+    --indigo: #223a63;
+    --indigo-soft: #3d5a8a;
+    --indigo-wash: #e8edf6;
+    --gold: #b8842f;
+    --gold-wash: #f6ecd8;
+    --green: #2f6e4f;
+    --green-wash: #e3efe6;
+    --green-line: #a9cdb6;
+    --red: #a23e34;
+    --red-wash: #f6e6e2;
+    --red-line: #e0b3a9;
+    --serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', serif;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    --radius-s: 3px;
+    --radius-m: 6px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html,body{
+    margin:0; padding:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  body{
+    background-image:
+      radial-gradient(circle, rgba(28,36,49,0.055) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  a{ color: inherit; }
+
+  .app{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 20px 80px;
+  }
+
+  /* ---------- Header ---------- */
+  header.top{
+    display:flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 18px;
+    margin-bottom: 22px;
+    border-bottom: 2px solid var(--ink);
+    flex-wrap: wrap;
+  }
+  header.top .title-block h1{
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 1.85rem;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+  }
+  header.top .title-block p{
+    margin:0;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    max-width: 46ch;
+  }
+  .score-summary{
+    display:flex;
+    gap: 22px;
+    align-items: baseline;
+    font-family: var(--mono);
+  }
+  .score-summary .stat{
+    text-align: right;
+  }
+  .score-summary .stat .num{
+    display:block;
+    font-size: 1.5rem;
+    font-family: var(--serif);
+    color: var(--indigo);
+    line-height: 1;
+  }
+  .score-summary .stat .lbl{
+    display:block;
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    margin-top: 3px;
+  }
+  .score-summary .stat.correct .num{ color: var(--green); }
+  .score-summary .stat.incorrect .num{ color: var(--red); }
+
+  /* ---------- Progress bar ---------- */
+  .progress-track{
+    height: 6px;
+    background: var(--hair);
+    border-radius: 3px;
+    overflow:hidden;
+    margin-bottom: 26px;
+  }
+  .progress-fill{
+    height: 100%;
+    background: linear-gradient(90deg, var(--indigo-soft), var(--indigo));
+    width: 0%;
+    transition: width 0.35s ease;
+  }
+
+  /* ---------- Layout ---------- */
+  .layout{
+    display:grid;
+    grid-template-columns: 250px 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+  @media (max-width: 880px){
+    .layout{ grid-template-columns: 1fr; }
+  }
+
+  /* ---------- Sidebar / palette ---------- */
+  .sidebar{
+    position: sticky;
+    top: 20px;
+    background: var(--paper-raised);
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-m);
+    padding: 16px;
+  }
+  @media (max-width: 880px){
+    .sidebar{ position: static; }
+  }
+  .sidebar h2{
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    margin: 0 0 10px;
+    color: var(--ink);
+  }
+  .filter-row{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .chip{
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    padding: 4px 9px;
+    border: 1px solid var(--hair-strong);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink-soft);
+    cursor: pointer;
+    line-height: 1.4;
+  }
+  .chip:hover{ border-color: var(--indigo-soft); color: var(--indigo); }
+  .chip.active{
+    background: var(--indigo);
+    border-color: var(--indigo);
+    color: #fff;
+  }
+
+  .palette{
+    display:grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 5px;
+  }
+  @media (max-width: 880px){
+    .palette{ grid-template-columns: repeat(auto-fill, minmax(30px,1fr)); max-height: 220px; overflow-y:auto; }
+  }
+  .pdot{
+    aspect-ratio: 1 / 1;
+    border: 1px solid var(--hair-strong);
+    border-radius: var(--radius-s);
+    background: var(--paper);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--ink-soft);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    padding: 0;
+  }
+  .pdot.current{ border-color: var(--indigo); box-shadow: 0 0 0 2px var(--indigo-wash) inset; font-weight:700; color: var(--indigo); }
+  .pdot.correct{ background: var(--green-wash); border-color: var(--green-line); color: var(--green); }
+  .pdot.incorrect{ background: var(--red-wash); border-color: var(--red-line); color: var(--red); }
+  .pdot.hidden{ display:none; }
+
+  .legend{
+    margin-top: 12px;
+    display:flex;
+    flex-direction:column;
+    gap: 5px;
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    font-family: var(--mono);
+  }
+  .legend span.sw{
+    display:inline-block;
+    width:9px; height:9px;
+    border-radius:2px;
+    margin-right:6px;
+    vertical-align:middle;
+    border:1px solid var(--hair-strong);
+  }
+
+  .reset-btn{
+    margin-top: 14px;
+    width: 100%;
+    background: none;
+    border: 1px solid var(--hair-strong);
+    color: var(--ink-soft);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    padding: 7px;
+    border-radius: var(--radius-s);
+    cursor:pointer;
+  }
+  .reset-btn:hover{ border-color: var(--red); color: var(--red); }
+
+  /* ---------- Main question panel ---------- */
+  .panel{
+    background: var(--paper-raised);
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-m);
+    padding: 28px 30px 26px;
+    min-height: 420px;
+  }
+  @media (max-width: 600px){
+    .panel{ padding: 20px 18px; }
+  }
+
+  .qmeta{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .qnum{
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--ink-faint);
+  }
+  .tag{
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--hair-strong);
+  }
+  .tag.topic{ color: var(--indigo); border-color: var(--indigo-wash); background: var(--indigo-wash); }
+  .tag.diff-easy{ color: var(--green); background: var(--green-wash); border-color: var(--green-line); }
+  .tag.diff-medium{ color: var(--gold); background: var(--gold-wash); border-color: #e3cd9e; }
+  .tag.diff-hard{ color: var(--red); background: var(--red-wash); border-color: var(--red-line); }
+  .tag.pts{ color: var(--ink-soft); }
+
+  .qtext{
+    font-family: var(--serif);
+    font-size: 1.22rem;
+    line-height: 1.5;
+    margin: 4px 0 22px;
+    color: var(--ink);
+  }
+
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .opt{
+    display:flex;
+    align-items:flex-start;
+    gap: 12px;
+    text-align:left;
+    padding: 13px 15px;
+    border: 1px solid var(--hair-strong);
+    border-radius: var(--radius-s);
+    background: var(--paper);
+    cursor:pointer;
+    font-size: 0.98rem;
+    color: var(--ink);
+    transition: border-color 0.12s ease, background 0.12s ease;
+  }
+  .opt:hover:not(.locked){ border-color: var(--indigo-soft); background: var(--indigo-wash); }
+  .opt .oletter{
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    border: 1px solid var(--hair-strong);
+    border-radius: 3px;
+    width: 22px; height: 22px;
+    min-width: 22px;
+    display:flex; align-items:center; justify-content:center;
+    margin-top: 1px;
+  }
+  .opt.selected:not(.locked){ border-color: var(--indigo); background: var(--indigo-wash); }
+  .opt.selected:not(.locked) .oletter{ border-color: var(--indigo); color: var(--indigo); background:#fff; }
+
+  .opt.locked{ cursor: default; }
+  .opt.reveal-correct{ border-color: var(--green-line); background: var(--green-wash); }
+  .opt.reveal-correct .oletter{ border-color: var(--green); color: var(--green); background:#fff; }
+  .opt.reveal-wrong{ border-color: var(--red-line); background: var(--red-wash); }
+  .opt.reveal-wrong .oletter{ border-color: var(--red); color: var(--red); background:#fff; }
+
+  .action-row{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .btn{
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: var(--radius-s);
+    border: 1px solid var(--indigo);
+    background: var(--indigo);
+    color: #fff;
+    cursor: pointer;
+  }
+  .btn:disabled{
+    background: transparent;
+    color: var(--ink-faint);
+    border-color: var(--hair-strong);
+    cursor:not-allowed;
+  }
+  .btn.secondary{
+    background: transparent;
+    color: var(--indigo);
+  }
+  .btn.secondary:hover:not(:disabled){ background: var(--indigo-wash); }
+  .btn.ghost{
+    background: transparent;
+    color: var(--ink-soft);
+    border-color: var(--hair-strong);
+  }
+  .btn.ghost:hover{ border-color: var(--ink-soft); }
+
+  .feedback-line{
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 3px 0;
+  }
+  .feedback-line.right{ color: var(--green); }
+  .feedback-line.wrong{ color: var(--red); }
+
+  .explanation{
+    margin-top: 16px;
+    padding: 16px 18px;
+    background: var(--gold-wash);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 var(--radius-s) var(--radius-s) 0;
+    font-size: 0.94rem;
+    line-height: 1.6;
+    color: #3a2f1c;
+  }
+  .explanation .exp-label{
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    text-transform: lowercase;
+    letter-spacing: 0.02em;
+    color: var(--gold);
+    display:block;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .explanation strong{ color: #1c2431; }
+
+  .nav-row{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    margin-top: 26px;
+    padding-top: 18px;
+    border-top: 1px solid var(--hair);
+  }
+  .nav-row .mid{
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+  }
+
+  /* ---------- Summary screen ---------- */
+  .summary{ display:none; }
+  .summary.active{ display:block; }
+  .panel.summary-panel{ display:block; }
+  .summary h2{
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    margin: 0 0 6px;
+  }
+  .summary .lead{ color: var(--ink-soft); margin-bottom: 22px; }
+  .score-big{
+    display:flex;
+    align-items:baseline;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .score-big .val{
+    font-family: var(--serif);
+    font-size: 3rem;
+    color: var(--indigo);
+  }
+  .score-big .of{
+    font-family: var(--mono);
+    color: var(--ink-faint);
+    font-size: 1.1rem;
+  }
+  .topic-breakdown{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px,1fr));
+    gap: 12px;
+    margin-bottom: 26px;
+  }
+  .tb-card{
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-s);
+    padding: 12px 14px;
+  }
+  .tb-card .tname{ font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); margin-bottom: 6px; }
+  .tb-card .tbar{ height: 5px; background: var(--hair); border-radius: 3px; overflow:hidden; margin-bottom: 6px; }
+  .tb-card .tbar-fill{ height:100%; background: var(--indigo-soft); }
+  .tb-card .tscore{ font-family: var(--serif); font-size: 1.05rem; }
+
+  .missed-list{
+    display:flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .missed-item{
+    display:flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-s);
+    cursor:pointer;
+    font-size: 0.88rem;
+  }
+  .missed-item:hover{ border-color: var(--red-line); background: var(--red-wash); }
+  .missed-item .mq{ color: var(--ink); }
+  .missed-item .marrow{ color: var(--ink-faint); font-family: var(--mono); }
+
+  .unanswered-note{
+    font-size: 0.85rem;
+    color: var(--ink-faint);
+    margin-top: 18px;
+    font-family: var(--mono);
+  }
+
+  footer.credits{
+    text-align:center;
+    color: var(--ink-faint);
+    font-size: 0.75rem;
+    font-family: var(--mono);
+    margin-top: 36px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <div class="title-block">
+      <h1>Deep Learning &amp; LLM Systems — Exam Practice Bank</h1>
+      <p>100 practice questions covering neural network foundations, CNNs, attention &amp; transformers, LLM prompting/RAG, and agentic AI systems. Select an answer, then check it to see the worked explanation.</p>
+    </div>
+    <div class="score-summary">
+      <div class="stat"><span class="num" id="statAnswered">0</span><span class="lbl">answered</span></div>
+      <div class="stat correct"><span class="num" id="statCorrect">0</span><span class="lbl">correct</span></div>
+      <div class="stat incorrect"><span class="num" id="statIncorrect">0</span><span class="lbl">incorrect</span></div>
+    </div>
+  </header>
+
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <h2>Topics</h2>
+      <div class="filter-row" id="topicFilters"></div>
+      <h2>Question map</h2>
+      <div class="palette" id="palette"></div>
+      <div class="legend">
+        <div><span class="sw" style="background:var(--paper);border-color:var(--hair-strong);"></span>unanswered</div>
+        <div><span class="sw" style="background:var(--indigo-wash);border-color:var(--indigo);"></span>current</div>
+        <div><span class="sw" style="background:var(--green-wash);border-color:var(--green-line);"></span>correct</div>
+        <div><span class="sw" style="background:var(--red-wash);border-color:var(--red-line);"></span>incorrect</div>
+      </div>
+      <button class="reset-btn" id="resetBtn">Reset all answers</button>
+    </aside>
+
+    <main>
+      <section class="panel" id="quizPanel">
+        <div class="qmeta">
+          <span class="qnum" id="qNum">Question 1 of 100</span>
+          <span class="tag topic" id="qTopic">Topic</span>
+          <span class="tag" id="qDiff">Difficulty</span>
+          <span class="tag pts" id="qPts">1 pt</span>
+        </div>
+        <div class="qtext" id="qText">Loading question…</div>
+        <div class="options" id="qOptions"></div>
+
+        <div id="feedbackArea"></div>
+
+        <div class="action-row">
+          <button class="btn" id="checkBtn" disabled>Check answer</button>
+          <button class="btn secondary" id="clearBtn" style="display:none;">Try again</button>
+        </div>
+
+        <div class="nav-row">
+          <button class="btn ghost" id="prevBtn">&larr; Previous</button>
+          <span class="mid" id="navMid"></span>
+          <button class="btn ghost" id="nextBtn">Next &rarr;</button>
+        </div>
+      </section>
+
+      <section class="panel summary-panel" id="summaryPanel" style="display:none;">
+        <h2>Practice summary</h2>
+        <p class="lead">Here's how you did across the questions you've answered so far. Keep going or jump back to review anything you missed.</p>
+        <div class="score-big"><span class="val" id="sumScore">0</span><span class="of">/ 100 correct</span></div>
+        <div class="topic-breakdown" id="topicBreakdown"></div>
+        <h2 style="font-size:1.1rem;">Missed questions</h2>
+        <div class="missed-list" id="missedList"></div>
+        <div class="unanswered-note" id="unansweredNote"></div>
+      </section>
+
+      <div style="text-align:center; margin-top:18px;">
+        <button class="btn ghost" id="toggleSummaryBtn">View summary</button>
+      </div>
+    </main>
+  </div>
+
+  <footer class="credits">Practice bank generated for exam preparation · questions are modelled on, but distinct from, the original course question bank</footer>
+</div>
+
+<script id="question-data" type="application/json">
+[
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "Which parameter allows a neuron to shift its activation threshold without changing any of the feature weights?",
+  "options": [
+   "Learning rate",
+   "Bias",
+   "Batch size",
+   "Gradient"
+  ],
+  "correct": 1,
+  "explanation": "The bias term is added after the weighted sum (z = w&middot;x + b) and is independent of the input features, so adjusting it slides the decision boundary without touching the weight vector. The learning rate controls step size during training, batch size controls how many samples are processed together, and the gradient is a training signal &mdash; none of these directly shift the boundary the way a bias does.",
+  "id": 1
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "A deep feedforward network stacks ten layers, but every layer uses the identity (linear) activation function. What does the network's overall computation reduce to?",
+  "options": [
+   "A single linear transformation of the input",
+   "A model that cannot perform matrix multiplication",
+   "A network that requires one neuron per training sample",
+   "A convolutional feature extractor"
+  ],
+  "correct": 0,
+  "explanation": "Composing linear maps stays linear: if each layer computes y = W<sub>i</sub>x + b<sub>i</sub>, chaining ten of them still simplifies to a single y = W'x + b', with W' the product of all the W<sub>i</sub> matrices. Depth without a nonlinearity therefore adds no representational power over one layer.",
+  "id": 2
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Hard",
+  "score": 1,
+  "q": "During backpropagation, a hidden unit's local derivative (the slope of its own activation function) evaluates to exactly zero, while the gradient arriving from the next layer is large and nonzero. What gradient value continues backward through this unit?",
+  "options": [
+   "The upstream gradient, unchanged",
+   "The negative of the upstream gradient",
+   "Zero",
+   "The squared upstream gradient"
+  ],
+  "correct": 2,
+  "explanation": "The chain rule multiplies the upstream gradient by the unit's local derivative: &part;L/&part;x = (&part;L/&part;out) &middot; (&part;out/&part;x). Multiplying any nonzero upstream value by a local derivative of 0 gives 0, so no gradient signal passes further back through that unit &mdash; this is exactly what happens to a saturated or 'dead' ReLU unit.",
+  "id": 3
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "A single-layer perceptron is mathematically guaranteed to converge to a decision boundary that separates two classes with zero training error only when the classes satisfy which condition?",
+  "options": [
+   "They are linearly separable",
+   "They contain an equal number of samples",
+   "Their features are already normalised",
+   "They are represented using one-hot labels"
+  ],
+  "correct": 0,
+  "explanation": "The perceptron convergence theorem guarantees the algorithm finds a separating hyperplane in finitely many steps if and only if the two classes can be separated by a straight line (or hyperplane in higher dimensions). Class balance, feature normalisation, and label encoding affect training speed or convenience but are not the condition the guarantee depends on.",
+  "id": 4
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "A perceptron uses weights [3, -1], receives input [1, 4], and has bias -2. What is its linear score before any activation function is applied?",
+  "options": [
+   "-1",
+   "-3",
+   "1",
+   "5"
+  ],
+  "correct": 1,
+  "explanation": "The pre-activation score is z = w&middot;x + b = (3)(1) + (-1)(4) + (-2) = 3 - 4 - 2 = <strong>-3</strong>. Each weight is multiplied by its matching input, the products are summed, and the bias is added last.",
+  "id": 5
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "All neurons in a hidden layer are initialised with the exact same weight values. What training problem does this create?",
+  "options": [
+   "The layer's gradients vanish immediately",
+   "Every neuron in the layer stays symmetric and keeps learning identical features",
+   "ReLU activations can no longer be used",
+   "The network's output becomes undefined"
+  ],
+  "correct": 1,
+  "explanation": "With identical initial weights, every neuron in the layer receives the same input and computes the same output, so their gradients during backpropagation are also identical &mdash; every update keeps the neurons in lockstep. Random initialisation breaks this symmetry so each neuron can specialise in a different feature.",
+  "id": 6
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "A computation graph has one variable feeding into the output through two separate intermediate paths. How does backpropagation correctly compute the gradient with respect to that variable?",
+  "options": [
+   "Multiply the local derivatives along only the shorter of the two paths",
+   "Multiply the local derivatives along each path, then sum the two path results",
+   "Add the local derivatives along each path, then multiply the two sums together",
+   "Multiply all four local derivatives into one product regardless of path"
+  ],
+  "correct": 1,
+  "explanation": "The multivariate chain rule states that when a variable influences the output through multiple paths, the total derivative is the <em>sum</em> of the derivatives along each path, where each path's contribution is the <em>product</em> of the local derivatives along that path: &part;L/&part;x = &Sigma;<sub>paths</sub> &prod;<sub>edges in path</sub> (local derivative).",
+  "id": 7
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "Which property is guaranteed to hold for the outputs of a Softmax layer, across every class, for any input logits?",
+  "options": [
+   "Every output is strictly positive, and all outputs sum to exactly one",
+   "Outputs sum to one, but an output can equal zero for a very negative logit",
+   "Outputs sum to one only if the logits were mean-centred beforehand",
+   "Every output is strictly positive, but the sum only approaches one as the number of classes grows"
+  ],
+  "correct": 0,
+  "explanation": "Softmax computes p<sub>i</sub> = e<sup>z<sub>i</sub></sup> / &Sigma;<sub>j</sub> e<sup>z<sub>j</sub></sup>. Because the exponential function is strictly positive for any real input, every p<sub>i</sub> &gt; 0 no matter how negative z<sub>i</sub> is, and the denominator ensures the outputs always sum to exactly one &mdash; regardless of scale or centring of the logits.",
+  "id": 8
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "A model has a single output neuron representing the probability that a patient's scan shows a tumour. Which activation function is most suitable at that output neuron?",
+  "options": [
+   "ReLU",
+   "Tanh",
+   "Sigmoid",
+   "Linear"
+  ],
+  "correct": 2,
+  "explanation": "Sigmoid squashes any real-valued score into the (0, 1) range, which is exactly the range a probability must occupy, making it the standard choice for a single-neuron binary-classification output. ReLU is unbounded above, Tanh outputs in (-1, 1), and a linear output is unbounded in both directions &mdash; none of these represent a probability directly.",
+  "id": 9
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "A batch of inputs X has shape (8, 6) (8 samples, 6 features) and passes through a linear layer computing output = X @ W + b, where W has shape (6, 4) and b has shape (4,). What is the shape of the output, and why does adding b work despite the apparent shape mismatch?",
+  "options": [
+   "(6, 4) &mdash; because X @ W is computed transposed internally to line up with b",
+   "(8, 4) &mdash; because b is broadcast across all 8 rows, adding the same 4-element vector to every sample",
+   "(8, 4) &mdash; because b is first tiled into a full (8, 4) array by repeating its values before addition",
+   "Undefined &mdash; (8, 4) and (4,) cannot be added without an explicit reshape"
+  ],
+  "correct": 1,
+  "explanation": "X @ W has shape (8, 4) since (8,6)&middot;(6,4) contracts the shared dimension of 6. NumPy/PyTorch broadcasting then treats the (4,) bias vector as if it had shape (1, 4) and stretches it along the row dimension, adding the same bias vector to each of the 8 samples &mdash; no explicit tiling in memory is required.",
+  "id": 10
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "For Z = X @ W + b, X has shape (20, 5) and W has shape (5, 7). Which bias shape broadcasts correctly across the batch dimension?",
+  "options": [
+   "(20,)",
+   "(5,)",
+   "(7,)",
+   "(20, 5)"
+  ],
+  "correct": 2,
+  "explanation": "Z = X @ W has shape (20, 7), since the matrix multiplication produces one 7-dimensional output row per sample. For broadcasting to add the same bias vector to every row, b must match the trailing (feature) dimension, so it needs shape <strong>(7,)</strong>.",
+  "id": 11
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "For Z = X @ W, given the upstream gradient dZ (the gradient of the loss with respect to Z), which pair of expressions correctly gives dX and dW for backpropagation?",
+  "options": [
+   "dX = dZ @ W and dW = X @ dZ",
+   "dX = W @ dZ.T and dW = dZ.T @ X",
+   "dX = dZ @ W.T and dW = X.T @ dZ",
+   "dX = W.T @ dZ and dW = dZ @ X.T"
+  ],
+  "correct": 2,
+  "explanation": "For Z = X @ W, the backward-pass rules are dX = dZ @ W<sup>T</sup> and dW = X<sup>T</sup> @ dZ. Transposing the 'other' matrix in each product keeps the shapes consistent: if X is (N, D) and W is (D, M), then dZ is (N, M), so dZ @ W<sup>T</sup> gives back shape (N, D) matching X, and X<sup>T</sup> @ dZ gives shape (D, M) matching W.",
+  "id": 12
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Hard",
+  "score": 1,
+  "q": "For Z = X @ W + b, dZ holds gradients for an entire mini-batch of samples. Which operation correctly produces the gradient for the bias vector b?",
+  "options": [
+   "Sum dZ across the sample (batch) dimension",
+   "Multiply dZ element-wise by X",
+   "Transpose W and stop",
+   "Square every entry of dZ"
+  ],
+  "correct": 0,
+  "explanation": "Because the same bias vector is added to every sample in the batch (broadcasting), its gradient collects contributions from all samples: db = &Sigma;<sub>i=1</sub><sup>N</sup> dZ<sub>i</sub>, i.e. summing dZ down the batch axis. This mirrors how the bias was broadcast forward &mdash; broadcasting forward becomes summation backward.",
+  "id": 13
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Easy",
+  "score": 2,
+  "q": "A parameter currently equals 3.5, its computed gradient is 0.8, and the learning rate is 0.1. What is the parameter's value after one step of gradient descent?",
+  "options": [
+   "3.58",
+   "3.42",
+   "3.4",
+   "3.5"
+  ],
+  "correct": 1,
+  "explanation": "Gradient descent update: w<sub>new</sub> = w<sub>old</sub> &minus; &eta; &middot; &nabla;w = 3.5 &minus; (0.1)(0.8) = 3.5 &minus; 0.08 = <strong>3.42</strong>.",
+  "id": 14
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Medium",
+  "score": 2,
+  "q": "A ReLU neuron receives input x = [1, 3], weights w = [2, -0.5], and bias 0.5. What output does it produce?",
+  "options": [
+   "0",
+   "-1",
+   "1",
+   "2"
+  ],
+  "correct": 2,
+  "explanation": "First compute the pre-activation: z = w&middot;x + b = (2)(1) + (-0.5)(3) + 0.5 = 2 - 1.5 + 0.5 = 1. Then apply ReLU(z) = max(0, z) = max(0, 1) = <strong>1</strong>.",
+  "id": 15
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "For Z = X @ W, X has shape (10, 5) and the upstream gradient dZ has shape (10, 4). Which expression and resulting shape correctly compute dW?",
+  "options": [
+   "dZ @ X.T, shape (10, 10)",
+   "X @ dZ.T, shape (5, 10)",
+   "X.T @ dZ, shape (5, 4)",
+   "dZ.T @ X, shape (4, 5)"
+  ],
+  "correct": 2,
+  "explanation": "dW must end up with the same shape as W. Since Z = X @ W with X:(10,5) and Z:(10,4), W must have shape (5,4). The backward rule dW = X<sup>T</sup> @ dZ gives (5,10)&middot;(10,4) = <strong>(5, 4)</strong>, matching W exactly.",
+  "id": 16
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "A perceptron has weights [2, -1] and learning rate 0.3. For input [1, 3] with true label 1, it currently predicts 0. Using w<sub>new</sub> = w<sub>old</sub> + &eta;(y - &ycirc;)x, what are the updated weights?",
+  "options": [
+   "[2.3, -0.1]",
+   "[1.7, -1.9]",
+   "[2.6, -0.7]",
+   "[2, -1]"
+  ],
+  "correct": 0,
+  "explanation": "The error term is (y - &ycirc;) = (1 - 0) = 1. The update is w<sub>new</sub> = [2, -1] + 0.3 &middot; 1 &middot; [1, 3] = [2, -1] + [0.3, 0.9] = <strong>[2.3, -0.1]</strong>.",
+  "id": 17
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "An MLP has 3 input features, one hidden layer with 5 neurons, and an output layer with 2 neurons, with a bias for every hidden and output neuron. How many trainable parameters does it contain in total?",
+  "options": [
+   "25",
+   "30",
+   "32",
+   "37"
+  ],
+  "correct": 2,
+  "explanation": "Input-to-hidden layer: weights = 3 &times; 5 = 15, biases = 5, subtotal = 20. Hidden-to-output layer: weights = 5 &times; 2 = 10, biases = 2, subtotal = 12. Total = 20 + 12 = <strong>32</strong> trainable parameters.",
+  "id": 18
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Medium",
+  "score": 2,
+  "q": "A mini-batch produces parameter gradients 0.3, 0.5, 0.7 and 0.9 for the same weight. If the mean of these gradients updates a parameter initially equal to 4, using learning rate 0.5, what is the new parameter value?",
+  "options": [
+   "4.3",
+   "3.9",
+   "3.7",
+   "4.1"
+  ],
+  "correct": 2,
+  "explanation": "Mean gradient = (0.3 + 0.5 + 0.7 + 0.9) / 4 = 2.4 / 4 = 0.6. Update: w<sub>new</sub> = w<sub>old</sub> &minus; &eta; &middot; mean gradient = 4 &minus; (0.5)(0.6) = 4 &minus; 0.3 = <strong>3.7</strong>.",
+  "id": 19
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "A sigmoid-activated hidden neuron repeatedly receives large-magnitude negative pre-activation values, and learning for the weights feeding into it becomes extremely slow. What explains this?",
+  "options": [
+   "The output saturates near 0 but remains bounded, so gradient flow is unaffected",
+   "The neuron becomes 'confident', so its loss contribution drops to exactly zero",
+   "The sigmoid's derivative shrinks toward zero at that extreme, so almost no gradient passes back",
+   "Large negative z causes the weight updates to repeatedly flip sign, producing oscillation"
+  ],
+  "correct": 2,
+  "explanation": "The sigmoid derivative is &sigma;'(z) = &sigma;(z)(1 - &sigma;(z)), which approaches 0 whenever &sigma;(z) is near either 0 or 1 &mdash; i.e., whenever |z| is large in either direction. This near-zero local derivative multiplies with the upstream gradient during the chain rule, so almost no gradient reaches the weights feeding that neuron: the classic vanishing-gradient / saturation problem.",
+  "id": 20
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Medium",
+  "score": 2,
+  "q": "A batch X has shape (6, 3), W1 has shape (3, 8), and W2 has shape (8, 2). After computing H = ReLU(X @ W1) and Y = H @ W2, what are the shapes of H and Y respectively?",
+  "options": [
+   "(3, 8) and (8, 2)",
+   "(6, 3) and (6, 8)",
+   "(8, 6) and (2, 6)",
+   "(6, 8) and (6, 2)"
+  ],
+  "correct": 3,
+  "explanation": "X @ W1: (6,3)&middot;(3,8) &rarr; H has shape <strong>(6, 8)</strong> (ReLU is applied element-wise and doesn't change shape). Then H @ W2: (6,8)&middot;(8,2) &rarr; Y has shape <strong>(6, 2)</strong>.",
+  "id": 21
+ },
+ {
+  "topic": "Neural Network Foundations",
+  "co": "CO1",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "In the backward pass for Z = X @ W, why does the gradient dW depend on the values in X, even though X is not itself a parameter being updated?",
+  "options": [
+   "Because X is updated alongside W during training, so its own gradient must be computed too",
+   "Because X determines how much each weight contributed to Z, so &part;L/&part;W must scale with the input values each weight was multiplied by",
+   "Because matrix multiplication in NumPy requires both operands to be differentiated together regardless of role",
+   "Because dW is actually independent of X, and X only appears in the formula to keep matrix shapes aligned"
+  ],
+  "correct": 1,
+  "explanation": "Each entry Z<sub>ij</sub> = &Sigma;<sub>k</sub> X<sub>ik</sub>W<sub>kj</sub>, so &part;Z<sub>ij</sub>/&part;W<sub>kj</sub> = X<sub>ik</sub>. By the chain rule, the gradient flowing into each weight is scaled by exactly the input value that weight was multiplied with during the forward pass &mdash; which is why dW = X<sup>T</sup> @ dZ mathematically must involve X, independent of whether X itself receives a parameter update.",
+  "id": 22
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "Which property of a convolutional layer lets the exact same feature detector be applied at every spatial position of an image?",
+  "options": [
+   "Batch shuffling",
+   "Output flattening",
+   "Weight sharing",
+   "Gradient clipping"
+  ],
+  "correct": 2,
+  "explanation": "A convolutional kernel's weights are reused (shared) as it slides across the whole input, so the same set of parameters detects a given pattern (an edge, a texture) no matter where it appears in the image. This is what keeps parameter counts low compared to a fully-connected layer over the same input.",
+  "id": 23
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "Keeping the kernel size fixed, what happens to a convolution's output feature-map size as the stride is increased?",
+  "options": [
+   "It increases the number of channels",
+   "It leaves every spatial dimension unchanged",
+   "It reduces the spatial dimensions",
+   "It increases the number of kernel weights"
+  ],
+  "correct": 2,
+  "explanation": "Stride controls how far the kernel moves between applications. A larger stride skips more positions, so fewer output locations are computed, shrinking the output's height and width. It has no effect on the number of channels (set by the number of filters) or the number of weights per kernel.",
+  "id": 24
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "Why does max pooling make a CNN more robust to small translations (shifts) of the input?",
+  "options": [
+   "It averages nearby activations, smoothing out the effect of a shift",
+   "It keeps only the strongest activation in each window, so a small shift within that window doesn't change the pooled output",
+   "It learns a filter that explicitly detects and corrects positional shifts",
+   "It adds extra channels so every shifted version of a feature is stored separately"
+  ],
+  "correct": 1,
+  "explanation": "Max pooling reports the maximum activation within a local window. As long as the strongest response stays inside that window, a small shift in the input doesn't change which value gets reported, giving the network a degree of shift invariance without any learned parameters.",
+  "id": 25
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "Which of the following architectures is historically recognised as one of the earliest convolutional networks, notably applied to handwritten digit recognition?",
+  "options": [
+   "ResNet",
+   "YOLO",
+   "U-Net",
+   "LeNet"
+  ],
+  "correct": 3,
+  "explanation": "LeNet (developed by Yann LeCun and colleagues in the late 1980s/1990s) is widely credited as one of the first practical CNNs, applied to digit recognition tasks such as reading handwritten zip codes. ResNet, YOLO, and U-Net are all considerably later architectures.",
+  "id": 26
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "Which architectural choice is most strongly associated with the VGG family of networks?",
+  "options": [
+   "Stacks of repeated small (3x3) convolution kernels",
+   "Attention-only processing blocks with no convolutions",
+   "A single very large convolutional layer",
+   "Recurrent connections between hidden states"
+  ],
+  "correct": 0,
+  "explanation": "VGG networks are defined by their use of many stacked small 3x3 convolutional kernels instead of fewer, larger kernels. Stacking small kernels achieves a large effective receptive field while using fewer parameters and adding more nonlinearities than one big kernel would.",
+  "id": 27
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "What architectural feature distinguishes ResNet from a conventional sequential CNN, and lets it train much deeper networks successfully?",
+  "options": [
+   "Recurrent state updates carried across layers",
+   "Self-attention layers weighing relationships between spatial positions",
+   "Depthwise separable convolutions that cut parameter count",
+   "Residual shortcut connections that let gradients skip over one or more layers"
+  ],
+  "correct": 3,
+  "explanation": "ResNet introduces identity shortcut ('skip') connections that add a layer's input directly to its output. This gives gradients a direct path backward that bypasses the intermediate layers, which sidesteps the vanishing-gradient problem that otherwise makes very deep plain CNNs hard to optimise.",
+  "id": 28
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "Which preprocessing step typically places raw pixel values on a more consistent numerical scale before they are fed into a CNN?",
+  "options": [
+   "Segmentation",
+   "Normalisation",
+   "Detection",
+   "Flattening"
+  ],
+  "correct": 1,
+  "explanation": "Normalisation rescales pixel intensities (for example, dividing by 255, or subtracting a dataset mean and dividing by a standard deviation) so input values fall in a consistent, small numeric range, which helps training converge more reliably. Segmentation and detection are downstream vision tasks, not preprocessing steps, and flattening reshapes data rather than rescaling it.",
+  "id": 29
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "Why does data augmentation genuinely reduce overfitting, rather than simply adding more raw images to train on?",
+  "options": [
+   "It supplies strictly new information the model has never seen before",
+   "It reduces the model's effective capacity to fit the data",
+   "It stops the model from memorising exact pixel patterns tied to individual training images",
+   "It filters out noisy examples, leaving only the cleanest images"
+  ],
+  "correct": 2,
+  "explanation": "Augmentation (rotating, cropping, flipping, or colour-jittering images) presents varied versions of the same underlying content. Because the label stays the same across these variants, the model is discouraged from memorising exact pixel arrangements and instead has to learn features that are robust to these transformations &mdash; it doesn't add new information so much as it discourages over-reliance on incidental details.",
+  "id": 30
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "Beyond predicting an object's category, what additional output does a typical object-detection model produce for each detected object?",
+  "options": [
+   "A bounding box specifying the object's location in the image",
+   "A pixel-wise mask outlining the object's exact shape",
+   "A depth estimate of the object's distance from the camera",
+   "A count of how many training epochs were used"
+  ],
+  "correct": 0,
+  "explanation": "Object detection combines classification with localisation: for each detected object the model outputs both a class label and a bounding box (typically coordinates for the box's corner and its width/height) marking where that object sits in the image. Pixel-level masks belong to segmentation, and depth estimation is a separate task entirely.",
+  "id": 31
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "Which computer-vision task produces a prediction for every individual pixel, rather than only drawing a bounding box around objects?",
+  "options": [
+   "Object detection",
+   "Image classification",
+   "Instance counting",
+   "Image segmentation"
+  ],
+  "correct": 3,
+  "explanation": "Segmentation assigns a class label to every pixel in the image, producing a dense, pixel-level map. Classification assigns one label to an entire image, and detection localises objects with boxes rather than exact pixel boundaries.",
+  "id": 32
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Hard",
+  "score": 1,
+  "q": "A vision system must classify and localise objects in a single unified pass, without a separate region-proposal stage. Which listed architecture best fits this requirement?",
+  "options": [
+   "VGG",
+   "LeNet",
+   "YOLO",
+   "A standard MLP"
+  ],
+  "correct": 2,
+  "explanation": "YOLO ('You Only Look Once') was specifically designed to predict bounding boxes and class probabilities in a single forward pass over the whole image, avoiding the separate proposal-then-classify pipeline used by earlier two-stage detectors. VGG and LeNet are classification backbones, not detectors, and a standard MLP has no built-in mechanism for spatial localisation.",
+  "id": 33
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "When transfer learning starts from a pre-trained CNN, what is actually carried over from the original model?",
+  "options": [
+   "The original training schedule, including its learning rate and epoch count",
+   "The final classification layer, since it already predicts the correct labels",
+   "The learned weights, which encode features extracted from the original training data",
+   "The original training dataset itself, retrained alongside the new task's data"
+  ],
+  "correct": 2,
+  "explanation": "Transfer learning reuses the learned weights of a pre-trained network, which already encode useful low- and mid-level visual features (edges, textures, shapes) from the original large dataset. The final classification layer is normally replaced (since class labels differ), and neither the original training schedule nor the original dataset need to be reused.",
+  "id": 34
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "During transfer learning, a pre-trained CNN layer's parameters are frozen. What happens to that layer during training?",
+  "options": [
+   "Its weights stay fixed, but the layer still computes normal forward and backward passes",
+   "Its weights stay fixed, and the layer is skipped entirely during the forward pass",
+   "Its weights still receive gradient updates, just at a much smaller learning rate",
+   "Its weights stay fixed, but its biases continue to update as usual"
+  ],
+  "correct": 0,
+  "explanation": "Freezing a layer means gradients are still computed through it (so gradients can flow back to earlier layers, if any are trainable), but the optimiser is told not to update that layer's own weights. The layer isn't skipped &mdash; its forward computation still contributes to the network's output.",
+  "id": 35
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "In a standard PyTorch training iteration, which call actually computes the gradients once the loss has been obtained?",
+  "options": [
+   "model.eval()",
+   "optimizer.step()",
+   "torch.no_grad()",
+   "loss.backward()"
+  ],
+  "correct": 3,
+  "explanation": "loss.backward() triggers automatic differentiation, walking the computation graph backward from the loss to populate the .grad attribute of every parameter that requires gradients. model.eval() switches modules like dropout/batchnorm into inference mode, optimizer.step() applies an update using gradients already computed, and torch.no_grad() disables gradient tracking altogether.",
+  "id": 36
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Hard",
+  "score": 1,
+  "q": "A PyTorch training loop calls loss.backward() every batch but never calls optimizer.zero_grad(). What behaviour results?",
+  "options": [
+   "The model automatically switches into evaluation mode",
+   "Predictions are automatically re-normalised each batch",
+   "Every parameter becomes permanently frozen",
+   "Gradients accumulate across batches instead of being recomputed fresh"
+  ],
+  "correct": 3,
+  "explanation": "PyTorch's .backward() call adds newly computed gradients to whatever is already stored in each parameter's .grad attribute rather than overwriting it. Without zero_grad() clearing that buffer beforehand, gradients from every previous batch keep piling up, corrupting the update direction for the optimiser.",
+  "id": 37
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Easy",
+  "score": 2,
+  "q": "A 9x9 input is processed with a 4x4 convolutional kernel, stride 1, and no padding. What is the spatial size of the resulting feature map?",
+  "options": [
+   "9x9",
+   "4x4",
+   "13x13",
+   "6x6"
+  ],
+  "correct": 3,
+  "explanation": "Output size formula: O = &lfloor;(W &minus; K + 2P) / S&rfloor; + 1, where W is the input size, K the kernel size, P the padding, and S the stride. Here O = (9 &minus; 4 + 0)/1 + 1 = 5 + 1 = <strong>6</strong>, giving a 6x6 output.",
+  "id": 38
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Medium",
+  "score": 2,
+  "q": "A team keeps increasing the depth of a plain CNN, but optimisation gets harder rather than easier. Which listed architecture is specifically designed to ease the training of very deep networks using shortcut paths?",
+  "options": [
+   "VGG",
+   "LeNet",
+   "AlexNet",
+   "ResNet"
+  ],
+  "correct": 3,
+  "explanation": "ResNet's residual (skip) connections give gradients a shortcut path to flow through during backpropagation, directly addressing the degradation and vanishing-gradient problems that plain very-deep networks like VGG, LeNet, and AlexNet run into as depth grows.",
+  "id": 39
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Medium",
+  "score": 2,
+  "q": "An image classifier performs well on its training set but poorly on new photos taken with mild rotation and viewpoint changes. Which training intervention most directly addresses this?",
+  "options": [
+   "Remove all convolutional layers from the network",
+   "Duplicate the existing training images without modification",
+   "Apply appropriate data augmentation (rotation, cropping, etc.)",
+   "Freeze the model's output predictions during training"
+  ],
+  "correct": 2,
+  "explanation": "Augmenting the training data with rotations, crops, and similar transformations exposes the model to the kinds of variation it will see at test time, teaching it to be robust to them rather than to memorise the exact poses seen in training.",
+  "id": 40
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Medium",
+  "score": 2,
+  "q": "A drivable-surface detection system needs to know exactly which pixels belong to the road, not just a rectangle around it. Which task should this system perform?",
+  "options": [
+   "Transfer learning",
+   "Object detection",
+   "Image classification",
+   "Image segmentation"
+  ],
+  "correct": 3,
+  "explanation": "Segmentation produces a dense, per-pixel prediction, which is exactly what's needed to trace the precise boundary of the road surface. Detection only gives a bounding box, classification gives one label for the whole image, and transfer learning is a training strategy rather than a task.",
+  "id": 41
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "A model correctly reports that an image contains two bicycles, but gives no indication of where in the image each one is. Which capability is missing for this to count as object detection?",
+  "options": [
+   "Weight initialisation",
+   "Gradient accumulation",
+   "Bounding-box localisation",
+   "Image normalisation"
+  ],
+  "correct": 2,
+  "explanation": "Detection requires both classification (what is present) and localisation (where it is), typically expressed as a bounding box per object. A model that only names the classes present, with no spatial coordinates, is performing (multi-label) classification, not detection.",
+  "id": 42
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Medium",
+  "score": 2,
+  "q": "A small labelled dataset closely resembles the kind of images a large pre-trained CNN was originally trained on. Which initial strategy is generally most suitable?",
+  "options": [
+   "Train the network from scratch using only randomly generated images",
+   "Discard the learned weights entirely and train from random initialisation",
+   "Remove the convolutional layers, keeping only the pooling layers",
+   "Reuse the pre-trained feature extractor and train a new classifier on top"
+  ],
+  "correct": 3,
+  "explanation": "When the new task is similar to the original training domain and labelled data is limited, the standard approach is to keep the pre-trained convolutional feature extractor (often frozen or lightly fine-tuned) and train only a new classification head, since the low- and mid-level features it already learned should transfer well.",
+  "id": 43
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "A transferred CNN with every feature layer frozen still fails to adapt well to a new image domain, even with plenty of labelled data. Which change most directly increases its ability to learn domain-specific features, and why?",
+  "options": [
+   "Add more labelled examples from the new domain while keeping every feature layer frozen, since more data alone should compensate for fixed features",
+   "Unfreeze some of the later feature layers and fine-tune them on the new data, letting higher-level features adapt to the new domain",
+   "Raise the learning rate of the classifier layer only, since a bigger step can compensate for outdated frozen features",
+   "Train the classifier layer for many more epochs, since extra time lets it better fit the already-frozen features"
+  ],
+  "correct": 1,
+  "explanation": "If the frozen features themselves don't suit the new domain, no amount of extra data or extra training on a fixed classifier head can fix that mismatch &mdash; the representations feeding the classifier stay unchanged. Unfreezing and fine-tuning some of the later (more task-specific) convolutional layers lets those features actually adapt to the statistics of the new domain.",
+  "id": 44
+ },
+ {
+  "topic": "Convolutional Networks",
+  "co": "CO2",
+  "difficulty": "Medium",
+  "score": 2,
+  "q": "Which sequence correctly represents the essential steps of one PyTorch training iteration, after the input and target have already been loaded?",
+  "options": [
+   "Clear gradients &rarr; forward pass &rarr; compute loss &rarr; backward pass &rarr; update parameters",
+   "Forward pass &rarr; compute loss &rarr; update parameters &rarr; backward pass &rarr; clear gradients",
+   "Forward pass &rarr; backward pass &rarr; compute loss &rarr; clear gradients &rarr; update parameters",
+   "Compute loss &rarr; forward pass &rarr; clear gradients &rarr; backward pass &rarr; update parameters"
+  ],
+  "correct": 0,
+  "explanation": "The standard PyTorch idiom is optimizer.zero_grad() &rarr; output = model(x) &rarr; loss = criterion(output, y) &rarr; loss.backward() &rarr; optimizer.step(). Clearing old gradients must happen before backward() accumulates new ones, the forward pass must happen before a loss can be computed from its output, and the parameter update must come last since it consumes the gradients backward() just produced.",
+  "id": 45
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "Which mechanism was introduced primarily so a model can dynamically weigh the relevance of different sequence elements when producing each output, instead of relying on one fixed-size summary of the whole input?",
+  "options": [
+   "Pooling",
+   "Positional encoding",
+   "Attention",
+   "Recurrent state propagation"
+  ],
+  "correct": 2,
+  "explanation": "Attention computes, for each output step, a fresh set of weights over all input positions, letting the model focus on whichever parts of the sequence are most relevant at that moment &mdash; unlike a single fixed-size context vector, which forces the whole input through one bottleneck.",
+  "id": 46
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "In self-attention, the query, key, and value matrices are each produced by separate learned linear projections. What do all three projections take as input?",
+  "options": [
+   "The same input sequence, each projected differently to form Q, K, and V",
+   "The input sequence for keys and values, but a separate target sequence for queries",
+   "Three independently sampled subsets of the input sequence, one per projection",
+   "The output of a prior layer for queries, but the raw input sequence for keys and values"
+  ],
+  "correct": 0,
+  "explanation": "In self-attention (as opposed to cross-attention), Q, K, and V are all linear projections of the exact same input sequence &mdash; three different weight matrices (W<sub>Q</sub>, W<sub>K</sub>, W<sub>V</sub>) are applied to the identical set of token representations, giving three different 'views' of the same data.",
+  "id": 47
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Hard",
+  "score": 1,
+  "q": "What is the primary role of computing the query-key compatibility (e.g., via a dot product) inside an attention mechanism?",
+  "options": [
+   "To normalise the value vectors so their magnitudes stay comparable across positions",
+   "To directly produce the final output representation, with no further weighting of values",
+   "To determine how many attention heads the layer should use",
+   "To produce a relevance score between a query and each key, later used to weight the corresponding values"
+  ],
+  "correct": 3,
+  "explanation": "The dot product between a query and each key produces a raw compatibility (relevance) score. After Softmax turns these scores into weights, they're used to combine the value vectors into a weighted sum &mdash; the compatibility score itself is an intermediate signal, not the final output.",
+  "id": 48
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "In scaled dot-product attention, the raw query-key dot products are divided by a scaling factor before Softmax is applied. What is that scaling factor?",
+  "options": [
+   "The total number of tokens in the sequence",
+   "The square root of the key vector's dimension",
+   "The number of attention heads in the layer",
+   "The square of the value vector's dimension"
+  ],
+  "correct": 1,
+  "explanation": "Scaled dot-product attention divides each raw score by &radic;d<sub>k</sub>, where d<sub>k</sub> is the dimensionality of the key (and query) vectors. This keeps the dot products from growing too large in magnitude as d<sub>k</sub> increases.",
+  "id": 49
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Hard",
+  "score": 1,
+  "q": "Why is scaling applied to query-key dot products before the Softmax step, particularly when the key dimension is large?",
+  "options": [
+   "To prevent large-magnitude scores from pushing Softmax into a region with very small gradients",
+   "To increase the effective sequence length the attention layer can see",
+   "To manufacture additional tokens for the model to attend over",
+   "To remove the need for a value projection entirely"
+  ],
+  "correct": 0,
+  "explanation": "Without scaling, dot products grow in expected magnitude as the key dimension d<sub>k</sub> increases (their variance scales with d<sub>k</sub>). Very large or very small logits push Softmax outputs toward one-hot vectors, where the gradient of Softmax with respect to its inputs becomes tiny, slowing learning. Dividing by &radic;d<sub>k</sub> keeps the scores in a range where Softmax's gradients stay useful.",
+  "id": 50
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "What advantage does multi-head attention provide compared to a single attention head of the same total dimension?",
+  "options": [
+   "It removes the need for any positional information",
+   "It guarantees the training loss converges to zero",
+   "It removes the need for learned projections in the attention layer",
+   "It lets the model jointly attend to information from different representation subspaces"
+  ],
+  "correct": 3,
+  "explanation": "Splitting the model dimension across several heads, each with its own learned Q/K/V projections, lets different heads specialise in capturing different kinds of relationships (e.g. syntactic vs. positional patterns) at once, then combines their results &mdash; something a single, larger head cannot do as flexibly.",
+  "id": 51
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "The original Transformer is built from two major stacked components: one that turns the input sequence into a contextual representation, and another that produces the output sequence from it. What are these two components called?",
+  "options": [
+   "Extractor and classifier",
+   "Encoder and decoder",
+   "Embedder and predictor",
+   "Generator and discriminator"
+  ],
+  "correct": 1,
+  "explanation": "The Transformer's encoder processes the input sequence into contextualised representations, and the decoder consumes those representations (via cross-attention) plus its own previous outputs to generate the output sequence, one token at a time.",
+  "id": 52
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "Which sublayer in a standard Transformer encoder layer processes each sequence position independently, right after the attention sublayer?",
+  "options": [
+   "Position-wise self-attention network",
+   "Positional encoding network",
+   "Layer normalisation network",
+   "Position-wise feed-forward network"
+  ],
+  "correct": 3,
+  "explanation": "After multi-head self-attention (which mixes information across positions), each Transformer encoder layer applies a position-wise feed-forward network &mdash; the same two-layer MLP applied independently and identically to every position, with no mixing across positions at this stage.",
+  "id": 53
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "Which normalisation technique used inside Transformer layers normalises across the feature dimension for each individual sequence position, rather than across the batch?",
+  "options": [
+   "Batch normalisation",
+   "Instance normalisation",
+   "Layer normalisation",
+   "Group normalisation"
+  ],
+  "correct": 2,
+  "explanation": "Layer normalisation computes its mean and variance across the features of a single token (a single position's vector), independent of other tokens or other samples in the batch, which makes it well suited to variable-length sequence data where batch statistics can be unstable.",
+  "id": 54
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "Why must positional information be explicitly added to token embeddings when using self-attention for sequence modelling?",
+  "options": [
+   "Because self-attention treats the input tokens as an unordered set, so order must be injected separately",
+   "Because self-attention already encodes order, and positional encoding is only added for numerical stability",
+   "Because positional encoding replaces the need for an attention mechanism entirely",
+   "Because self-attention needs positional encoding to determine how many attention heads to use"
+  ],
+  "correct": 0,
+  "explanation": "Self-attention computes relevance scores based purely on content (query-key dot products), with no inherent notion of position &mdash; permuting the input tokens would permute the attention outputs identically, but wouldn't otherwise change anything. Adding positional encodings gives the model the sequence-order information it would otherwise lack.",
+  "id": 55
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "Two sequences contain the same tokens but in different orders, and both use identical token embeddings. Before entering a standard Transformer encoder, how does the model's input representation actually differ between the two sequences?",
+  "options": [
+   "Each token embedding is normalised using different layer-normalisation statistics, based on its position",
+   "Each token embedding is scaled by a different attention weight, based on its position",
+   "Each token embedding is passed through a different feed-forward network, based on its position",
+   "Each token embedding is combined with a different positional-encoding vector, based on its position"
+  ],
+  "correct": 3,
+  "explanation": "Before any attention or feed-forward computation happens, the input representation is formed as token embedding + positional encoding. Since the positional encoding depends only on a token's position (not its identity), the same token appearing in different positions across the two sequences is combined with a different positional vector each time &mdash; this is the only difference in the inputs to the encoder.",
+  "id": 56
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "What is the name of the architecture that adapts the Transformer's attention-based processing, originally designed for text, to computer-vision tasks such as image classification?",
+  "options": [
+   "Standard RNN",
+   "Vision Transformer",
+   "Logistic classifier",
+   "Linear perceptron"
+  ],
+  "correct": 1,
+  "explanation": "The Vision Transformer (ViT) applies the standard Transformer encoder to sequences of image patches, treating an image as a sequence of tokens in much the same way a sentence is treated as a sequence of word tokens.",
+  "id": 57
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "How is an image typically prepared as input to a standard Vision Transformer before it reaches the Transformer encoder?",
+  "options": [
+   "The image is resized and treated as a single token representing the entire image",
+   "The image is split into fixed-size patches, each individually classified before entering the encoder",
+   "The image is split into fixed-size patches, each flattened and linearly projected into an embedding",
+   "The image is passed through several convolutional layers to produce one feature map used directly as input"
+  ],
+  "correct": 2,
+  "explanation": "ViT divides the image into a grid of fixed-size, non-overlapping patches (e.g. 16x16 pixels), flattens each patch into a vector, and linearly projects it into an embedding &mdash; producing a sequence of patch embeddings that plays the same role token embeddings play in text Transformers.",
+  "id": 58
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "In the standard Vision Transformer, what is the purpose of the special learnable token prepended to the sequence of patch embeddings?",
+  "options": [
+   "Its final representation is used to perform image classification",
+   "It stores the positional encodings for every other patch",
+   "It replaces the need for a feed-forward network in the encoder",
+   "It marks the boundary between the training and test sets"
+  ],
+  "correct": 0,
+  "explanation": "This is the [CLS] (class) token. As it passes through the encoder, self-attention lets it aggregate information from every patch; its final-layer representation is then fed to a classification head to produce the image's predicted label.",
+  "id": 59
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "When implementing attention, why is K.T (the transpose of the key matrix) used when computing Q @ K.T, rather than using K directly?",
+  "options": [
+   "To reduce the dimensionality of the keys before scaling is applied",
+   "To convert key vectors into probability distributions before comparison",
+   "To ensure the key matrix has the same shape as the value matrix",
+   "To align the matrix dimensions so every query can be compared against every key via a single matrix multiplication"
+  ],
+  "correct": 3,
+  "explanation": "If Q has shape (n_q, d) and K has shape (n_k, d), then Q @ K.T has shape (n_q, n_k) &mdash; one compatibility score per query-key pair. Multiplying Q by K directly (without transposing) wouldn't have matching inner dimensions and wouldn't produce that all-pairs score matrix.",
+  "id": 60
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Hard",
+  "score": 1,
+  "q": "Given that a query's attention weights sum to 1 across all keys, which operation correctly produces that query's context (output) representation?",
+  "options": [
+   "An unweighted average of every value vector in the sequence",
+   "The value vector belonging to the single highest-weighted key",
+   "A weighted sum of the key vectors, using the attention weights as coefficients",
+   "A weighted sum of the value vectors, using the attention weights as coefficients"
+  ],
+  "correct": 3,
+  "explanation": "Once Softmax has converted the scaled scores into attention weights that sum to 1, the context vector for a query is computed as &Sigma;<sub>i</sub> (weight<sub>i</sub>) &middot; (value<sub>i</sub>) &mdash; a weighted sum over the value vectors, not the key vectors, and not a simple unweighted average or a hard selection of one value.",
+  "id": 61
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Easy",
+  "score": 2,
+  "q": "Consider translating \"The city council refused the demonstrators a permit because they feared violence\" &mdash; here \"they\" refers to the council. An RNN-based encoder-decoder that compresses the whole sentence into one fixed-size context vector often struggles to resolve such references correctly. Which limitation does attention specifically address?",
+  "options": [
+   "The decoder cannot process input sentences of varying length at all",
+   "The decoder applies identical weighting to every word during training",
+   "The decoder cannot generate output words in the correct grammatical order",
+   "The decoder cannot directly access specific earlier words, only one compressed summary"
+  ],
+  "correct": 3,
+  "explanation": "A fixed-size context vector forces the entire input sentence through a single bottleneck, so fine-grained information about specific earlier words (like which noun 'they' should resolve to) can be lost. Attention instead lets the decoder look back directly at every encoder position and weight them individually for each output word, preserving access to that specific information.",
+  "id": 62
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Medium",
+  "score": 2,
+  "q": "In scaled dot-product attention, a particular query-key dot product evaluates to 20, and the key vectors have dimension d_k = 25. What value is passed into Softmax after scaling?",
+  "options": [
+   "0.8",
+   "5",
+   "4",
+   "100"
+  ],
+  "correct": 2,
+  "explanation": "Scaling divides the raw score by &radic;d<sub>k</sub>: 20 / &radic;25 = 20 / 5 = <strong>4</strong>.",
+  "id": 63
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "For a given query, Softmax attention weights over three tokens are [0.2, 0.1, 0.7]. If the value vector V1 is scaled up by a large positive factor while V2 and V3 stay unchanged, what happens to the resulting context vector?",
+  "options": [
+   "It shifts strongly toward V3, since V3 already carries the dominant weight and dominates regardless",
+   "It stays unchanged, since Softmax weights are fixed regardless of the value magnitudes",
+   "It shifts toward V1, since that term's contribution to the weighted sum grows with V1's magnitude",
+   "It becomes undefined, since scaling one value vector breaks the weighted-sum computation"
+  ],
+  "correct": 2,
+  "explanation": "The context vector is the weighted sum 0.2&middot;V1 + 0.1&middot;V2 + 0.7&middot;V3. Even though V1's weight (0.2) is smaller than V3's (0.7), scaling V1 up by a large enough factor increases the magnitude of the 0.2&middot;V1 term without bound, so it will eventually dominate the sum &mdash; attention weights only control the relative contribution at a given value magnitude, not an absolute ceiling on any one term's influence.",
+  "id": 64
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "A multi-head attention layer has model dimension d_model = 256, split equally across 4 heads. Each head computes attention independently and produces an output of the per-head dimension. What must happen to the 4 head outputs before the layer produces its final 256-dimensional output, and what is each head's output dimension?",
+  "options": [
+   "The 4 outputs, each of dimension 64, are summed together to directly form the final output",
+   "The 4 outputs, each of dimension 256, are averaged together to directly form the final output",
+   "The 4 outputs, each of dimension 64, are concatenated together and passed through a final linear projection",
+   "The 4 outputs, each of dimension 128, are concatenated together with no further projection needed"
+  ],
+  "correct": 2,
+  "explanation": "Each head operates on a slice of size d_model / h = 256 / 4 = <strong>64</strong>. The h = 4 per-head outputs (each of dimension 64) are concatenated back into a 256-dimensional vector, which is then passed through one final learned linear projection to produce the layer's output.",
+  "id": 65
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Medium",
+  "score": 2,
+  "q": "A Transformer encoder block has just finished multi-head self-attention, and the result has been combined with the block's input via a residual connection followed by layer normalisation. What comes next, according to the standard encoder structure?",
+  "options": [
+   "A recurrent hidden-state update, followed by a residual connection and layer normalisation",
+   "A position-wise feed-forward network only, with no residual connection or normalisation applied afterward",
+   "A second multi-head self-attention layer, followed by a residual connection and layer normalisation",
+   "A position-wise feed-forward network, followed by another residual connection and layer normalisation"
+  ],
+  "correct": 3,
+  "explanation": "Each standard Transformer encoder layer has exactly two sublayers: multi-head self-attention (add & norm), then a position-wise feed-forward network (add & norm). There is no second self-attention sublayer and no recurrence in the encoder.",
+  "id": 66
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "During autoregressive decoding, why must a target position be prevented from attending to later target positions, and how is this typically enforced?",
+  "options": [
+   "To reduce computational cost during training, enforced by skipping attention computation for later positions entirely",
+   "To avoid the model using future tokens it wouldn't actually have at inference time, enforced by masking out future positions before Softmax",
+   "To prevent the decoder from attending to the encoder's output, enforced by masking cross-attention connections",
+   "To avoid the model using future tokens it wouldn't have at inference time, enforced by deleting those positions' embeddings from the sequence"
+  ],
+  "correct": 1,
+  "explanation": "At inference time the decoder generates tokens one at a time and genuinely has no access to future tokens, so training must match that constraint. This is enforced with a causal (look-ahead) mask that sets scores for future positions to negative infinity before Softmax, making their attention weight effectively zero &mdash; the embeddings themselves aren't removed, only masked out of the attention computation.",
+  "id": 67
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "Consider the sentences \"The chef praised the waiter\" and \"The waiter praised the chef,\" which contain identical tokens in different orders. If a Transformer received only token embeddings, with no positional information added, which distinction would self-attention alone be unable to make between the two sentences?",
+  "options": [
+   "Which token played the role of subject versus object, since attention scores depend only on token content, not position",
+   "Which sentence has a longer total sequence length, since attention cannot compute length without positional encoding",
+   "Which sentence contains more unique tokens, since attention scores are computed independently of token identity",
+   "Which sentence was passed through the encoder first, since attention processes sequences one at a time"
+  ],
+  "correct": 0,
+  "explanation": "Without positional information, self-attention's compatibility scores depend purely on token content (via Q and K), so a token's embedding produces the exact same query/key/value regardless of where it sits in the sequence. Since both sentences contain the identical multiset of tokens, the model has no way to distinguish which noun is doing the praising and which is being praised &mdash; that distinction depends entirely on word order.",
+  "id": 68
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "A Transformer uses sinusoidal positional encoding for a sequence of length 30, with embedding dimension 256. The encoding generates one sine or cosine value per dimension, per position, and is added element-wise to the token embeddings. If the token-embedding matrix X has shape (30, 256), what shape must the positional-encoding matrix have?",
+  "options": [
+   "(256, 30) &mdash; because positional encoding is defined per dimension first, then broadcast across positions",
+   "(30, 128) &mdash; because sinusoidal encoding only needs half the embedding dimensions, since sine and cosine are paired",
+   "(30, 256) &mdash; because element-wise addition requires matching shapes, and each of the 256 dimensions needs its own positional value",
+   "(30,) &mdash; because a single scalar positional value is added to every dimension of a token's embedding"
+  ],
+  "correct": 2,
+  "explanation": "Element-wise addition (X + positional_encoding) requires both operands to share the same shape. Since X is (30, 256), the positional-encoding matrix must also be (30, 256) &mdash; every one of the 256 embedding dimensions gets its own sinusoidal value (alternating sine/cosine pairs across dimension pairs) for every one of the 30 positions.",
+  "id": 69
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Medium",
+  "score": 2,
+  "q": "A Vision Transformer receives a 384x384 input image, divided into non-overlapping 16x16 patches before being processed as a sequence of tokens. How many patches does this division produce in total?",
+  "options": [
+   "196",
+   "384",
+   "24",
+   "576"
+  ],
+  "correct": 3,
+  "explanation": "Patches per side = 384 / 16 = 24. Total patches = 24 &times; 24 = <strong>576</strong>.",
+  "id": 70
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "In cross-attention, the query matrix Q has shape (6, 64) (6 decoder positions) and the key matrix K has shape (9, 64) (9 encoder positions). What is the shape of the score matrix produced by Q @ K.T, before Softmax is applied?",
+  "options": [
+   "(64, 64)",
+   "(9, 6)",
+   "(6, 9)",
+   "(6, 64)"
+  ],
+  "correct": 2,
+  "explanation": "Q @ K.T contracts the shared dimension of 64: (6, 64) &middot; (64, 9) = <strong>(6, 9)</strong> &mdash; one compatibility score for each of the 6 decoder queries against each of the 9 encoder keys.",
+  "id": 71
+ },
+ {
+  "topic": "Attention & Transformers",
+  "co": "CO3",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "After Softmax, an attention weight matrix has shape (7, 12) &mdash; representing weights for 7 queries over 12 keys &mdash; and the value matrix V has shape (12, 40). What is the shape of the resulting attention output, and what does each dimension represent?",
+  "options": [
+   "(12, 40) &mdash; one 40-dimensional context vector for each of the 12 keys",
+   "(7, 12) &mdash; the same shape as the attention weights, unchanged by the multiplication",
+   "(40, 7) &mdash; one context vector per output dimension, transposed relative to the queries",
+   "(7, 40) &mdash; one 40-dimensional context vector for each of the 7 queries"
+  ],
+  "correct": 3,
+  "explanation": "Multiplying the weight matrix by V contracts the shared dimension of 12 (the number of keys): (7, 12) &middot; (12, 40) = <strong>(7, 40)</strong>. Each of the 7 rows is one query's context vector, formed as a weighted combination of all 12 value vectors, each of dimension 40.",
+  "id": 72
+ },
+ {
+  "topic": "LLMs, Prompting & RAG",
+  "co": "CO4",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "A GPT-style decoder-only model generates text autoregressively, one token at a time. Which context does it use when predicting the next token?",
+  "options": [
+   "Only the single most recently generated token",
+   "All tokens in the sequence, including ones not yet generated",
+   "A retrieved set of externally related documents",
+   "All previously generated tokens up to the current point"
+  ],
+  "correct": 3,
+  "explanation": "An autoregressive decoder conditions each next-token prediction on the entire sequence generated so far (via causal self-attention over all prior positions), not just the last token and not any future tokens, which don't exist yet at generation time.",
+  "id": 73
+ },
+ {
+  "topic": "LLMs, Prompting & RAG",
+  "co": "CO4",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "A team changes an LLM's behaviour on a task purely by rewriting the instructions given to it, without altering any of the model's parameters. Which technique is this?",
+  "options": [
+   "Full fine-tuning",
+   "Prompt engineering",
+   "Model pre-training",
+   "Parameter-efficient adaptation"
+  ],
+  "correct": 1,
+  "explanation": "Prompt engineering changes model behaviour by crafting the input text (instructions, framing, examples) at inference time. No weights are updated, which distinguishes it from fine-tuning approaches that do modify parameters.",
+  "id": 74
+ },
+ {
+  "topic": "LLMs, Prompting & RAG",
+  "co": "CO4",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "A prompt gives an instruction followed by five representative input-output examples before the actual query is presented. Which prompting approach is this?",
+  "options": [
+   "Zero-shot prompting",
+   "Retrieval augmentation",
+   "Full fine-tuning",
+   "Few-shot prompting"
+  ],
+  "correct": 3,
+  "explanation": "Few-shot prompting supplies a handful of labelled examples directly in the prompt, letting the model infer the desired task pattern from those demonstrations without any parameter updates. Zero-shot prompting gives no examples at all, and the other two options involve changing the model's weights or its knowledge base rather than the prompt content.",
+  "id": 75
+ },
+ {
+  "topic": "LLMs, Prompting & RAG",
+  "co": "CO4",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "Which prompting method explicitly encourages a model to work through intermediate reasoning steps before producing its final answer?",
+  "options": [
+   "Zero-shot classification",
+   "Retrieval-based generation",
+   "Chain-of-thought prompting",
+   "Parameter-efficient tuning"
+  ],
+  "correct": 2,
+  "explanation": "Chain-of-thought prompting asks (or shows via examples) a model to lay out its intermediate reasoning steps before giving a final answer, which tends to improve performance on tasks requiring multi-step reasoning compared to asking for the answer directly.",
+  "id": 76
+ },
+ {
+  "topic": "LLMs, Prompting & RAG",
+  "co": "CO4",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "A model exhibits a newly learned task behaviour even when the original training examples or instructions are no longer included in the prompt at inference time. Which change most plausibly explains this persistence?",
+  "options": [
+   "The few-shot examples in the prompt were simply reordered",
+   "The retrieval system was updated to return better passages",
+   "The model's internal parameters were updated through fine-tuning",
+   "The model's earlier responses were cached and reused"
+  ],
+  "correct": 2,
+  "explanation": "Behaviour that persists without needing the original prompt content present means the change must be baked into the model itself, i.e. its weights were updated through some form of fine-tuning. Prompting-based techniques (few-shot examples, retrieval) only affect behaviour while they are actively included in the input.",
+  "id": 77
+ },
+ {
+  "topic": "LLMs, Prompting & RAG",
+  "co": "CO4",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "A team wants task-specific adaptation of a large model, but wants to avoid updating the full set of pre-trained parameters. Which approach best matches this constraint?",
+  "options": [
+   "Full model fine-tuning",
+   "Zero-shot prompting",
+   "Retrieval-only indexing with no fine-tuning",
+   "Parameter-efficient fine-tuning"
+  ],
+  "correct": 3,
+  "explanation": "Parameter-efficient fine-tuning methods (such as LoRA or adapters) train a small number of additional parameters while keeping the bulk of the pre-trained weights frozen, achieving task adaptation at a fraction of the compute and storage cost of full fine-tuning.",
+  "id": 78
+ },
+ {
+  "topic": "LLMs, Prompting & RAG",
+  "co": "CO4",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "LoRA (Low-Rank Adaptation) adapts a pre-trained model by introducing small trainable low-rank matrices while keeping the original weights frozen. Which broader category of technique does LoRA belong to?",
+  "options": [
+   "Parameter-efficient fine-tuning",
+   "Zero-shot prompting",
+   "Retrieval-augmented generation",
+   "Agentic planning"
+  ],
+  "correct": 0,
+  "explanation": "LoRA is a specific method within the broader family of parameter-efficient fine-tuning techniques: it adapts a model's behaviour by training a small number of new parameters (low-rank update matrices) rather than the full weight set.",
+  "id": 79
+ },
+ {
+  "topic": "LLMs, Prompting & RAG",
+  "co": "CO4",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "In a Retrieval-Augmented Generation (RAG) system, how are the retrieved documents actually used by the LLM?",
+  "options": [
+   "They are converted into new tokens added to the model's output vocabulary",
+   "They are used to briefly fine-tune the model's weights before generating a response",
+   "They are inserted into the input context alongside the user's query",
+   "They fully replace the original user query before generation begins"
+  ],
+  "correct": 2,
+  "explanation": "RAG concatenates the retrieved passages with the user's query to form an augmented prompt, which is then passed to the LLM as ordinary input context. The model's weights are never touched, and the original query is kept, not discarded.",
+  "id": 80
+ },
+ {
+  "topic": "LLMs, Prompting & RAG",
+  "co": "CO4",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "In a RAG pipeline, documents are converted into embeddings and stored in a vector store. What is the most direct purpose this serves?",
+  "options": [
+   "Automatically updating the LLM's parameters with the documents' content",
+   "Constructing the prompt template used to query the LLM",
+   "Enabling similarity-based retrieval of relevant documents for a given query",
+   "Generating the final natural-language answer returned to the user"
+  ],
+  "correct": 2,
+  "explanation": "Storing document embeddings in a vector store allows a new query (also embedded) to be compared against them using a similarity measure (e.g. cosine similarity), so the most relevant documents can be efficiently retrieved &mdash; this retrieval step is separate from prompt construction and from the LLM's own weights.",
+  "id": 81
+ },
+ {
+  "topic": "LLMs, Prompting & RAG",
+  "co": "CO4",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "An application sends a prompt to a hosted LLM over the internet and receives generated text back, without downloading, training, or storing the model locally. Which approach to using an LLM does this describe?",
+  "options": [
+   "Full model fine-tuning",
+   "Local model deployment",
+   "LLM API integration",
+   "Parameter-efficient fine-tuning"
+  ],
+  "correct": 2,
+  "explanation": "Calling a hosted model through an API endpoint &mdash; sending a request and receiving generated output, with no local copy of the model and no training involved &mdash; is the defining characteristic of LLM API integration, as opposed to deploying or fine-tuning a model locally.",
+  "id": 82
+ },
+ {
+  "topic": "LLMs, Prompting & RAG",
+  "co": "CO4",
+  "difficulty": "Easy",
+  "score": 2,
+  "q": "Two versions of a base LLM classify support tickets as \"urgent\" or \"routine.\" Version A receives only the instruction: \"Classify this ticket as urgent or routine.\" Version B receives the same instruction plus five example tickets with their correct labels before being asked to classify a new one. Which pairing correctly describes the prompting technique used in each version?",
+  "options": [
+   "Version A uses few-shot prompting; Version B uses zero-shot prompting",
+   "Version A uses zero-shot prompting; Version B uses few-shot prompting",
+   "Version A uses one-shot prompting; Version B uses chain-of-thought prompting",
+   "Version A uses zero-shot prompting; Version B uses chain-of-thought prompting"
+  ],
+  "correct": 1,
+  "explanation": "Version A gives no labelled examples at all, which is zero-shot prompting. Version B supplies several labelled examples before the actual query, which is few-shot prompting. Neither version asks the model to show intermediate reasoning, so chain-of-thought does not apply here.",
+  "id": 83
+ },
+ {
+  "topic": "LLMs, Prompting & RAG",
+  "co": "CO4",
+  "difficulty": "Medium",
+  "score": 2,
+  "q": "A team needs to adapt a large pre-trained model to a specialised domain, with the adaptation persisting across future uses without repeating any instructions, but they lack the compute to update all of the model's parameters. Which technique satisfies both the persistence requirement and the resource constraint?",
+  "options": [
+   "Zero-shot prompting",
+   "Full fine-tuning of all model parameters",
+   "Retrieval-augmented generation without any fine-tuning",
+   "LoRA-based fine-tuning"
+  ],
+  "correct": 3,
+  "explanation": "LoRA-based fine-tuning updates only a small set of additional low-rank parameters, which is far cheaper than full fine-tuning, while still producing weight changes that persist in the model for every future use &mdash; unlike prompting-based approaches, which only affect a single inference call.",
+  "id": 84
+ },
+ {
+  "topic": "LLMs, Prompting & RAG",
+  "co": "CO4",
+  "difficulty": "Medium",
+  "score": 2,
+  "q": "Given that documents have already been embedded and stored in a vector store, which sequence correctly represents the information flow of a basic RAG system when a new user query arrives?",
+  "options": [
+   "Retrieve relevant documents &rarr; embed query &rarr; augment prompt with retrieved content &rarr; generate response",
+   "Embed query &rarr; retrieve relevant documents &rarr; augment prompt with retrieved content &rarr; generate response",
+   "Embed query &rarr; augment prompt with retrieved content &rarr; retrieve relevant documents &rarr; generate response",
+   "Generate response &rarr; embed query &rarr; retrieve relevant documents &rarr; augment prompt with retrieved content"
+  ],
+  "correct": 1,
+  "explanation": "The query must first be embedded into the same vector space as the stored documents before it can be compared against them, so retrieval can happen. Only after relevant documents are retrieved can they be inserted into the prompt, and only then is that augmented prompt passed to the model to generate a response.",
+  "id": 85
+ },
+ {
+  "topic": "LLMs, Prompting & RAG",
+  "co": "CO4",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "An organisation's knowledge base changes hourly, and answers must reflect newly added documents immediately, without retraining or adapting the model's parameters. Which architecture best satisfies both requirements, and why do the alternatives fall short?",
+  "options": [
+   "Full fine-tuning repeated every hour on the latest documents, since this directly bakes new knowledge into the model",
+   "RAG over a continuously updated knowledge store, since new documents become immediately retrievable without touching model weights",
+   "A fixed set of few-shot examples embedded in every prompt, since these can be manually updated to reflect new information",
+   "Pre-training a new decoder model from scratch each day on the updated knowledge base"
+  ],
+  "correct": 1,
+  "explanation": "RAG separates knowledge (stored externally and retrievable) from the model's parameters, so adding a document to the store makes it immediately available at the next query with no retraining. Repeated fine-tuning or pre-training cannot keep pace with hourly updates and is far more expensive, and manually curated few-shot examples don't scale to a changing, large knowledge base.",
+  "id": 86
+ },
+ {
+  "topic": "LLMs, Prompting & RAG",
+  "co": "CO4",
+  "difficulty": "Medium",
+  "score": 2,
+  "q": "An application retrieves several relevant passages and sends them, along with the user's question, to an unchanged hosted LLM through an API. The model itself has not been fine-tuned, retrained, or otherwise altered. What has actually been modified for this particular request?",
+  "options": [
+   "The model's pre-trained parameters",
+   "The model's underlying architecture",
+   "The model's LoRA adaptation weights",
+   "The inference-time context provided to the model"
+  ],
+  "correct": 3,
+  "explanation": "Only the input context changes &mdash; the retrieved passages are concatenated with the question to form a richer prompt for this one request. The model's architecture, its pre-trained parameters, and any LoRA weights remain exactly as they were before and after the call.",
+  "id": 87
+ },
+ {
+  "topic": "LLMs, Prompting & RAG",
+  "co": "CO4",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "A RAG system's knowledge store contains a document with the exact answer to a user's question. However, the pipeline produces an incorrect answer, and logs confirm the relevant passage was never included in the prompt sent to the model. Which stage of the pipeline should be investigated first?",
+  "options": [
+   "Generation stage &mdash; the LLM likely ignored the passage despite receiving it",
+   "Prompt template stage &mdash; the retrieved passage was likely formatted incorrectly",
+   "Retrieval stage &mdash; the similarity search likely failed to surface the relevant passage",
+   "Embedding storage stage &mdash; the documents were likely never saved to the vector store"
+  ],
+  "correct": 2,
+  "explanation": "Since the logs confirm the passage was never included in the prompt at all, the failure happened before the prompt was assembled &mdash; at the retrieval step, where the similarity search over the vector store failed to surface the relevant document. The generation stage can be ruled out because the model never even received the passage to ignore.",
+  "id": 88
+ },
+ {
+  "topic": "Agentic AI Systems",
+  "co": "CO5",
+  "difficulty": "Easy",
+  "score": 1,
+  "q": "Asked \"What is 68,214 divided by 37?\", an LLM recognises it should not attempt the arithmetic itself, and instead calls an external calculator function, receives the result, and incorporates it into its reply. Which agentic capability does this demonstrate?",
+  "options": [
+   "Chain-of-thought reasoning",
+   "In-context learning",
+   "Tool use",
+   "Retrieval-augmented generation"
+  ],
+  "correct": 2,
+  "explanation": "Recognising the limits of its own computation and delegating a subtask to an external function (a calculator, API, or other tool), then incorporating the result, is the defining behaviour of tool use in an agentic system.",
+  "id": 89
+ },
+ {
+  "topic": "Agentic AI Systems",
+  "co": "CO5",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "Before executing a multi-part request, an AI system first breaks it into stages &mdash; gathering information, comparing options, then taking a final action &mdash; before carrying out any of them. Which capability is most directly illustrated?",
+  "options": [
+   "Memory retrieval",
+   "Planning",
+   "Tool use",
+   "Reflection"
+  ],
+  "correct": 1,
+  "explanation": "Decomposing a complex request into an ordered sequence of stages before acting on any of them is planning: reasoning about what needs to happen and in what order, ahead of execution.",
+  "id": 90
+ },
+ {
+  "topic": "Agentic AI Systems",
+  "co": "CO5",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "An agent calls a search tool, reads the result, and only then decides what its next action should be, rather than running a fixed, pre-defined sequence of calls regardless of outcome. What distinguishes this from a fixed sequence of calls?",
+  "options": [
+   "The model's parameters are updated after each call",
+   "No reasoning occurs between the two tool calls",
+   "Intermediate results influence what action is taken next",
+   "Every subsequent action was already fully predetermined"
+  ],
+  "correct": 2,
+  "explanation": "What separates a genuinely agentic loop from a hard-coded script is that the outcome of one step feeds back into the decision about the next step &mdash; the agent's next action is conditioned on what it just observed, rather than following a pre-written script regardless of results.",
+  "id": 91
+ },
+ {
+  "topic": "Agentic AI Systems",
+  "co": "CO5",
+  "difficulty": "Medium",
+  "score": 1,
+  "q": "Which of the following systems is least appropriately described as agentic?",
+  "options": [
+   "An LLM that plans a sequence of dependent steps before executing any of them",
+   "An LLM given a long, detailed prompt that produces a single comprehensive multi-paragraph response",
+   "An LLM that revises its next action after interpreting the result of a previous tool call",
+   "An LLM that selects and calls one external tool based on the input, then returns a final answer"
+  ],
+  "correct": 1,
+  "explanation": "Producing one comprehensive response to a single prompt, however detailed the prompt or long the response, involves no tool use, no planning across steps, and no adapting behaviour based on intermediate outcomes &mdash; it's a single generation, not agentic behaviour. The other three all involve some form of acting, observing, or planning.",
+  "id": 92
+ },
+ {
+  "topic": "Agentic AI Systems",
+  "co": "CO5",
+  "difficulty": "Hard",
+  "score": 1,
+  "q": "An agent may either recommend an irreversible external action or execute it immediately on its own. Which design choice most directly balances responsible deployment with preserving useful autonomy?",
+  "options": [
+   "Require human approval before irreversible actions are executed",
+   "Remove all reasoning capability from the agent",
+   "Retrain the underlying model before every single action",
+   "Replace all tool calls with longer text-only prompts"
+  ],
+  "correct": 0,
+  "explanation": "Requiring a human-in-the-loop approval step specifically for irreversible actions lets the agent keep reasoning, planning, and proposing freely, while adding a safety checkpoint only where a mistake can't be undone &mdash; preserving autonomy for low-risk steps without removing oversight where it matters most.",
+  "id": 93
+ },
+ {
+  "topic": "Agentic AI Systems",
+  "co": "CO5",
+  "difficulty": "Hard",
+  "score": 1,
+  "q": "A system reasons and plans correctly, but is authorised to invoke tools entirely unrelated to its assigned task. Which design concern remains, even with high-quality reasoning?",
+  "options": [
+   "Insufficient pre-training data",
+   "Missing positional encoding",
+   "Excessive action capability",
+   "Inadequate context augmentation"
+  ],
+  "correct": 2,
+  "explanation": "Good reasoning doesn't limit what an agent is capable of doing &mdash; if it retains permission to call tools outside its intended scope, a reasoning error, a manipulated input, or an unanticipated edge case can still lead it to take an inappropriate, unrelated action. Restricting an agent's available tools to only what its task requires (least-privilege access) is a separate safeguard from reasoning quality.",
+  "id": 94
+ },
+ {
+  "topic": "Agentic AI Systems",
+  "co": "CO5",
+  "difficulty": "Medium",
+  "score": 2,
+  "q": "A user asks: \"What's the current price of gold per ounce, and how much would 15 ounces be worth after a 3% dealer commission?\" Answering this correctly requires current market data, a numerical calculation, and combining both into one figure. Which behaviour most strongly demonstrates agentic operation in response to this request?",
+  "options": [
+   "Generate a full answer directly from the model's own training knowledge",
+   "Retrieve finance-related documents and quote excerpts from them in the response",
+   "Plan the required subtasks, call the needed tools, then combine the results",
+   "Ask the user to clarify which currency they want the answer expressed in"
+  ],
+  "correct": 2,
+  "explanation": "This request needs both up-to-date information (which the model's static training data can't reliably provide) and a calculation applied to that information. Planning the subtasks, invoking the appropriate tools (a price lookup and a calculator), and combining their outputs into one coherent answer is what distinguishes an agentic response from simply generating text or quoting retrieved passages.",
+  "id": 95
+ },
+ {
+  "topic": "Agentic AI Systems",
+  "co": "CO5",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "An agent has access to three tools: a calculator, a web-search tool, and a unit-conversion tool. Given the request \"How many kilometres are in 26.2 miles?\", the agent correctly identifies that a tool is needed, but calls the web-search tool instead of the unit-conversion tool. What does this failure indicate?",
+  "options": [
+   "The agent's underlying language model lacks the pre-trained knowledge to answer",
+   "The agent failed to recognise that any external tool was needed for this request",
+   "The agent correctly recognised a tool was needed, but failed to match the task to the right tool for it",
+   "The agent successfully solved the task, since web search can also perform unit conversion"
+  ],
+  "correct": 2,
+  "explanation": "The agent's tool-need detection worked correctly (it decided to call a tool rather than answer from memory), but its tool-selection step failed, choosing an ill-suited tool for a deterministic conversion task that the unit-conversion tool was built to handle directly and reliably.",
+  "id": 96
+ },
+ {
+  "topic": "Agentic AI Systems",
+  "co": "CO5",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "Which execution pattern best represents an adaptive agent, as opposed to a predetermined multi-step workflow?",
+  "options": [
+   "Execute a fixed sequence of steps 1, 2, and 3, regardless of the results returned at each step",
+   "Generate a response to a single prompt, return the output, and terminate",
+   "Apply a one-time fine-tuning update, then disable all further external actions",
+   "Reason about the situation, take an action, observe the outcome, then revise the next action based on it"
+  ],
+  "correct": 3,
+  "explanation": "The reason-act-observe-revise loop is what makes an agent adaptive: each action's outcome is fed back in to inform what happens next, rather than the whole sequence being decided in advance and executed blindly regardless of what actually happens.",
+  "id": 97
+ },
+ {
+  "topic": "Agentic AI Systems",
+  "co": "CO5",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "Two systems use the same three external tools. System A always calls them in a fixed order regardless of outcome, while System B chooses its next tool based on intermediate results. What property primarily makes System B more agentic?",
+  "options": [
+   "Greater parameter count",
+   "A larger number of available tools",
+   "Longer prompts given to the model",
+   "Dynamic action selection based on observed outcomes"
+  ],
+  "correct": 3,
+  "explanation": "Agency comes from adapting behaviour to what's actually happening, not from the number of tools, parameters, or the length of a prompt. System B's ability to choose its next action based on what earlier tool calls returned is exactly what distinguishes it from System A's rigid, outcome-independent sequence.",
+  "id": 98
+ },
+ {
+  "topic": "Agentic AI Systems",
+  "co": "CO5",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "An autonomous agent plans to reallocate $75,000 in advertising spend based on uncertain forecasted click-through rates. Which design best preserves the agent's planning ability while limiting risk?",
+  "options": [
+   "Let it execute immediately whenever its confidence score is high",
+   "Grant it unrestricted fund-transfer permissions to avoid execution delays",
+   "Have it ignore the forecasts and rely solely on its own internal reasoning",
+   "Let it analyse and propose an allocation, but require approval before funds actually move"
+  ],
+  "correct": 3,
+  "explanation": "Letting the agent fully plan, analyse forecasts, and propose a specific allocation preserves its useful reasoning and planning capability, while gating the actual, irreversible transfer of funds behind human approval limits the downside of an incorrect or overconfident forecast-driven decision.",
+  "id": 99
+ },
+ {
+  "topic": "Agentic AI Systems",
+  "co": "CO5",
+  "difficulty": "Hard",
+  "score": 2,
+  "q": "An AI assistant first retrieves policy documents from a vector store, then decides &mdash; based on the retrieved evidence &mdash; whether to invoke an external calculation tool before producing its final response. Which capability distinguishes this system from a basic RAG pipeline?",
+  "options": [
+   "Addition of retrieved context to the prompt",
+   "Retrieval of semantically similar documents",
+   "Generation of an answer from external knowledge",
+   "Dynamic tool selection based on retrieved evidence"
+  ],
+  "correct": 3,
+  "explanation": "A basic RAG pipeline stops at retrieving documents and augmenting the prompt for generation. Here, the system goes a step further: it evaluates the retrieved evidence and conditionally decides whether an additional tool call is warranted before answering &mdash; a dynamic, evidence-dependent decision that basic RAG does not make.",
+  "id": 100
+ }
+]
+</script>
+
+<script>
+(function(){
+  const QUESTIONS = JSON.parse(document.getElementById('question-data').textContent);
+  const TOTAL = QUESTIONS.length;
+
+  // state[i] = { selected: idx|null, checked: bool }
+  const state = QUESTIONS.map(() => ({ selected: null, checked: false }));
+  let current = 0;
+  let activeTopicFilter = 'All';
+
+  const topicOrder = [];
+  QUESTIONS.forEach(q => { if(!topicOrder.includes(q.co)) topicOrder.push(q.co); });
+  const topicNames = {};
+  QUESTIONS.forEach(q => { topicNames[q.co] = q.topic; });
+
+  // ---------- DOM refs ----------
+  const qNumEl = document.getElementById('qNum');
+  const qTopicEl = document.getElementById('qTopic');
+  const qDiffEl = document.getElementById('qDiff');
+  const qPtsEl = document.getElementById('qPts');
+  const qTextEl = document.getElementById('qText');
+  const qOptionsEl = document.getElementById('qOptions');
+  const feedbackArea = document.getElementById('feedbackArea');
+  const checkBtn = document.getElementById('checkBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const navMid = document.getElementById('navMid');
+  const paletteEl = document.getElementById('palette');
+  const topicFiltersEl = document.getElementById('topicFilters');
+  const statAnswered = document.getElementById('statAnswered');
+  const statCorrect = document.getElementById('statCorrect');
+  const statIncorrect = document.getElementById('statIncorrect');
+  const progressFill = document.getElementById('progressFill');
+  const resetBtn = document.getElementById('resetBtn');
+  const toggleSummaryBtn = document.getElementById('toggleSummaryBtn');
+  const quizPanel = document.getElementById('quizPanel');
+  const summaryPanel = document.getElementById('summaryPanel');
+  const sumScore = document.getElementById('sumScore');
+  const topicBreakdown = document.getElementById('topicBreakdown');
+  const missedList = document.getElementById('missedList');
+  const unansweredNote = document.getElementById('unansweredNote');
+
+  const letters = ['A','B','C','D'];
+
+  function decodeHTML(html){
+    const el = document.createElement('textarea');
+    el.innerHTML = html;
+    return el.value;
+  }
+
+  function diffClass(d){
+    if(d === 'Easy') return 'diff-easy';
+    if(d === 'Medium') return 'diff-medium';
+    return 'diff-hard';
+  }
+
+  // ---------- Topic filter chips ----------
+  function buildFilters(){
+    const allChip = document.createElement('button');
+    allChip.className = 'chip active';
+    allChip.textContent = 'All';
+    allChip.dataset.topic = 'All';
+    topicFiltersEl.appendChild(allChip);
+    topicOrder.forEach(co => {
+      const chip = document.createElement('button');
+      chip.className = 'chip';
+      chip.textContent = co;
+      chip.dataset.topic = co;
+      chip.title = topicNames[co];
+      topicFiltersEl.appendChild(chip);
+    });
+    topicFiltersEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('.chip');
+      if(!btn) return;
+      activeTopicFilter = btn.dataset.topic;
+      [...topicFiltersEl.children].forEach(c => c.classList.toggle('active', c === btn));
+      renderPalette();
+    });
+  }
+
+  // ---------- Palette ----------
+  function renderPalette(){
+    paletteEl.innerHTML = '';
+    QUESTIONS.forEach((q, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'pdot';
+      dot.textContent = q.id;
+      dot.title = decodeHTML(q.q).slice(0, 60) + '…';
+      if(activeTopicFilter !== 'All' && q.co !== activeTopicFilter){
+        dot.classList.add('hidden');
+      }
+      if(i === current) dot.classList.add('current');
+      const st = state[i];
+      if(st.checked){
+        dot.classList.add(st.selected === q.correct ? 'correct' : 'incorrect');
+      }
+      dot.addEventListener('click', () => { current = i; render(); });
+      paletteEl.appendChild(dot);
+    });
+  }
+
+  // ---------- Stats ----------
+  function updateStats(){
+    let answered = 0, correct = 0, incorrect = 0;
+    state.forEach((st, i) => {
+      if(st.checked){
+        answered++;
+        if(st.selected === QUESTIONS[i].correct) correct++; else incorrect++;
+      }
+    });
+    statAnswered.textContent = answered;
+    statCorrect.textContent = correct;
+    statIncorrect.textContent = incorrect;
+    progressFill.style.width = (answered / TOTAL * 100).toFixed(1) + '%';
+  }
+
+  // ---------- Main question render ----------
+  function render(){
+    const q = QUESTIONS[current];
+    const st = state[current];
+
+    qNumEl.textContent = `Question ${current + 1} of ${TOTAL}`;
+    qTopicEl.textContent = q.co + ' · ' + q.topic;
+    qDiffEl.textContent = q.difficulty;
+    qDiffEl.className = 'tag ' + diffClass(q.difficulty);
+    qPtsEl.textContent = q.score + (q.score === 1 ? ' pt' : ' pts');
+    qTextEl.innerHTML = q.q;
+
+    qOptionsEl.innerHTML = '';
+    q.options.forEach((optText, idx) => {
+      const opt = document.createElement('button');
+      opt.className = 'opt';
+      opt.innerHTML = `<span class="oletter">${letters[idx]}</span><span>${optText}</span>`;
+      if(st.checked){
+        opt.classList.add('locked');
+        if(idx === q.correct) opt.classList.add('reveal-correct');
+        else if(idx === st.selected) opt.classList.add('reveal-wrong');
+      } else {
+        if(idx === st.selected) opt.classList.add('selected');
+        opt.addEventListener('click', () => {
+          st.selected = idx;
+          render();
+        });
+      }
+      qOptionsEl.appendChild(opt);
+    });
+
+    checkBtn.disabled = st.selected === null || st.checked;
+    checkBtn.style.display = st.checked ? 'none' : 'inline-block';
+    clearBtn.style.display = st.checked ? 'inline-block' : 'none';
+
+    feedbackArea.innerHTML = '';
+    if(st.checked){
+      const right = st.selected === q.correct;
+      const line = document.createElement('div');
+      line.className = 'feedback-line ' + (right ? 'right' : 'wrong');
+      line.textContent = right ? '✓ Correct' : `✗ Not quite — the correct answer is ${letters[q.correct]}.`;
+      feedbackArea.appendChild(line);
+
+      const exp = document.createElement('div');
+      exp.className = 'explanation';
+      exp.innerHTML = `<span class="exp-label">explanation</span>${q.explanation}`;
+      feedbackArea.appendChild(exp);
+    }
+
+    navMid.textContent = `${current + 1} / ${TOTAL}`;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === TOTAL - 1;
+
+    renderPalette();
+    updateStats();
+  }
+
+  // ---------- Actions ----------
+  checkBtn.addEventListener('click', () => {
+    const st = state[current];
+    if(st.selected === null) return;
+    st.checked = true;
+    render();
+  });
+
+  clearBtn.addEventListener('click', () => {
+    const st = state[current];
+    st.checked = false;
+    st.selected = null;
+    render();
+  });
+
+  prevBtn.addEventListener('click', () => { if(current > 0){ current--; render(); } });
+  nextBtn.addEventListener('click', () => { if(current < TOTAL - 1){ current++; render(); } });
+
+  resetBtn.addEventListener('click', () => {
+    if(!confirm('Reset every answer you have entered? This cannot be undone.')) return;
+    state.forEach(st => { st.selected = null; st.checked = false; });
+    render();
+  });
+
+  // ---------- Summary ----------
+  function renderSummary(){
+    let correct = 0, answered = 0;
+    const byTopic = {};
+    topicOrder.forEach(co => byTopic[co] = { correct: 0, total: 0 });
+
+    QUESTIONS.forEach((q, i) => {
+      byTopic[q.co].total++;
+      if(state[i].checked){
+        answered++;
+        if(state[i].selected === q.correct){ correct++; byTopic[q.co].correct++; }
+      }
+    });
+
+    sumScore.textContent = correct;
+
+    topicBreakdown.innerHTML = '';
+    topicOrder.forEach(co => {
+      const t = byTopic[co];
+      const pct = t.total ? (t.correct / t.total * 100) : 0;
+      const card = document.createElement('div');
+      card.className = 'tb-card';
+      card.innerHTML = `
+        <div class="tname">${co} · ${topicNames[co]}</div>
+        <div class="tbar"><div class="tbar-fill" style="width:${pct.toFixed(0)}%"></div></div>
+        <div class="tscore">${t.correct} / ${t.total}</div>
+      `;
+      topicBreakdown.appendChild(card);
+    });
+
+    missedList.innerHTML = '';
+    let missedCount = 0;
+    QUESTIONS.forEach((q, i) => {
+      const st = state[i];
+      if(st.checked && st.selected !== q.correct){
+        missedCount++;
+        const item = document.createElement('div');
+        item.className = 'missed-item';
+        item.innerHTML = `<span class="mq">Q${q.id} · ${q.q.slice(0, 70)}${q.q.length > 70 ? '…' : ''}</span><span class="marrow">review &rarr;</span>`;
+        item.addEventListener('click', () => {
+          current = i;
+          showQuiz();
+          render();
+        });
+        missedList.appendChild(item);
+      }
+    });
+    if(missedCount === 0){
+      missedList.innerHTML = '<div class="unanswered-note">No missed questions among those answered so far.</div>';
+    }
+
+    const unanswered = TOTAL - answered;
+    unansweredNote.textContent = unanswered > 0
+      ? `${unanswered} question${unanswered === 1 ? '' : 's'} not yet answered.`
+      : 'All 100 questions answered.';
+  }
+
+  function showSummary(){
+    quizPanel.style.display = 'none';
+    summaryPanel.style.display = 'block';
+    toggleSummaryBtn.textContent = 'Back to questions';
+    renderSummary();
+  }
+  function showQuiz(){
+    quizPanel.style.display = 'block';
+    summaryPanel.style.display = 'none';
+    toggleSummaryBtn.textContent = 'View summary';
+  }
+  toggleSummaryBtn.addEventListener('click', () => {
+    if(summaryPanel.style.display === 'block') showQuiz(); else showSummary();
+  });
+
+  // ---------- Init ----------
+  buildFilters();
+  render();
+})();
+</script>
+</body>
+</html>

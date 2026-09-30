@@ -20,7 +20,6 @@ An interactive, high-performance web platform designed for Chitkara University's
 
 ## ✨ Key Features
 
-- **65 Syllabus Questions & 92 Total Marks**: Complete coverage arranged according to official ST-2 syllabus modules with difficulty badges and marks allocation.
 - **Dual Learning Modes**:
   - **Practice Mode**: Step-by-step topic masterclasses, beginner intuitions, numerical walkthroughs, warm-up practice questions, and isolated progress tracking.
   - **📝 Continuous Exam Mode**: Full continuous test view with all 65 questions in a row, instant option evaluation, detailed explanations, and an independent **Reset Exam** progress tracker.

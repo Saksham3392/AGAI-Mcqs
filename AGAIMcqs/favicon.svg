@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <!-- Background Gradient matching AGAI design system -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e40af"/>
+      <stop offset="45%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </linearGradient>
+
+    <!-- Glowing Generative Spark Gradient -->
+    <linearGradient id="sparkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="60%" stop-color="#f0f9ff"/>
+      <stop offset="100%" stop-color="#bae6fd"/>
+    </linearGradient>
+
+    <!-- Agentic Node Gradient -->
+    <linearGradient id="nodeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a5f3fc"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+
+    <!-- Soft Depth Shadow -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="#0f172a" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Squircle Base Badge -->
+  <rect x="2" y="2" width="60" height="60" rx="15" fill="url(#bgGrad)" stroke="rgba(255, 255, 255, 0.35)" stroke-width="1.8"/>
+
+  <!-- Network Connection Lines (Agentic AI Topology) -->
+  <g stroke="rgba(255, 255, 255, 0.45)" stroke-width="1.8" stroke-linecap="round">
+    <line x1="16" y1="18" x2="32" y2="32"/>
+    <line x1="48" y1="18" x2="32" y2="32"/>
+    <line x1="16" y1="46" x2="32" y2="32"/>
+    <line x1="48" y1="46" x2="32" y2="32"/>
+    <line x1="16" y1="18" x2="48" y2="18" stroke-dasharray="2.5,3.5" stroke-opacity="0.5"/>
+    <line x1="16" y1="46" x2="48" y2="46" stroke-dasharray="2.5,3.5" stroke-opacity="0.5"/>
+  </g>
+
+  <!-- Peripheral Agentic Decision Nodes -->
+  <circle cx="16" cy="18" r="4.2" fill="url(#nodeGrad)" stroke="#ffffff" stroke-width="1.5"/>
+  <circle cx="48" cy="18" r="4.2" fill="url(#nodeGrad)" stroke="#ffffff" stroke-width="1.5"/>
+  <circle cx="16" cy="46" r="4.2" fill="url(#nodeGrad)" stroke="#ffffff" stroke-width="1.5"/>
+  <circle cx="48" cy="46" r="4.2" fill="url(#nodeGrad)" stroke="#ffffff" stroke-width="1.5"/>
+
+  <!-- Central AI Generative Spark (Astroid Star) -->
+  <path d="M 32 15 
+           C 32 24.5, 24.5 32, 15 32 
+           C 24.5 32, 32 39.5, 32 49 
+           C 32 39.5, 39.5 32, 49 32 
+           C 39.5 32, 32 24.5, 32 15 Z" 
+        fill="url(#sparkGrad)" 
+        filter="url(#shadow)"/>
+
+  <!-- Precision Nucleus Core -->
+  <circle cx="32" cy="32" r="2.8" fill="#ffffff"/>
+  <circle cx="32" cy="32" r="1.3" fill="#1e40af"/>
+</svg>
